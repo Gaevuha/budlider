@@ -1,0 +1,46 @@
+.theme {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #265e5e;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.theme-toggle {
+  display: block;
+  width: 40px;
+  height: 20px;
+  background-color: #c7c0bc;
+  border: none;
+  border-radius: 17px;
+  position: relative;
+  transition: all 350ms ease-in-out;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  cursor: pointer;
+}
+
+.theme input:checked + .theme-toggle {
+  background-color: #265e5e;
+}
+
+/* Зміщення кружечка вправо при активному стані */
+.theme input:checked + .theme-toggle::before {
+  left: calc(100% - 4% - 17px); /* або просто left: 55%; */
+}
+
+.theme-toggle::before {
+  content: '';
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 50%;
+  left: 4%;
+  transform: translateY(-50%);
+  transition: all 350ms ease-in-out;
+}

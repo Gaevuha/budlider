@@ -1,0 +1,11 @@
+.text__logo {
+    font-size: 87px;
+    fill: #213538;
+    font-style: italic;
+}
+
+.text__logo-accent {
+    font-size: 87px;
+    font-weight: bold;
+    fill: #265e5e;
+}
