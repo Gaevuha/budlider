@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ['cdn.dummyjson.com'], // заміни на домен, з якого приходять картинки з бекенду
+  },
 };
 
 export default nextConfig;

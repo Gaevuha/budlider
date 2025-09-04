@@ -77,6 +77,11 @@ img {
   overflow: hidden;
 }
 
+.section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
 /* Styles for Mobile devices */
 .container {
   max-width: 375px;

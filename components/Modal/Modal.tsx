@@ -1,9 +1,12 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import type { Product } from '../../types/product';
+import Image from 'next/image';
+import type { Product } from '@/types/product';
 import styles from './Modal.module.css';
-import { useCart } from '../../hooks/useCart';
-import { useWishlist } from '../../hooks/useWishlist'; // якщо будеш реалізовувати Wishlist
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 
 interface ModalProps {
   product: Product;
@@ -11,55 +14,46 @@ interface ModalProps {
 }
 
 export default function Modal({ product, onClose }: ModalProps) {
-  const { addToCart, removeFromCart, isInCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist(); // для Wishlist
+  const { addToCart, removeFromCart, cart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [inCart, setInCart] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
 
   // Слідкуємо за станом кошика
   useEffect(() => {
-    setInCart(isInCart(product.id));
-  }, [isInCart, product.id]);
+    setInCart(cart.some(p => p.id === product.id));
+  }, [cart, product.id]);
 
   // Слідкуємо за станом wishlist
   useEffect(() => {
     setInWishlist(isInWishlist(product.id));
   }, [isInWishlist, product.id]);
 
-  // Обробка клавіші Escape для закриття модального вікна
+  // Закриття модалки по Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
   }, [onClose]);
 
-  // Обробка кнопки додавання/видалення товару в кошик
   const handleCartClick = () => {
-    if (inCart) {
-      removeFromCart(product.id);
-    } else {
-      addToCart(product);
-    }
-    setInCart(!inCart);
+    if (inCart) removeFromCart(product.id);
+    else addToCart(product);
   };
 
-  // Обробка кнопки додавання/видалення товару у wishlist
   const handleWishlistClick = () => {
-    if (inWishlist) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product.id);
-    }
+    if (inWishlist) removeFromWishlist(product.id);
+    else addToWishlist(product.id);
     setInWishlist(!inWishlist);
   };
+
+  if (typeof document === 'undefined') return null; // SSR safety
 
   return ReactDOM.createPortal(
     <div
@@ -69,10 +63,7 @@ export default function Modal({ product, onClose }: ModalProps) {
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div
-        className={styles.modal__content}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={styles.modal__content} onClick={e => e.stopPropagation()}>
         <button
           className={styles.modal__closeBtn}
           onClick={onClose}
@@ -81,21 +72,38 @@ export default function Modal({ product, onClose }: ModalProps) {
         ></button>
 
         <div className={styles.modalProduct}>
-          <img
-            className={styles.modalProduct__img}
-            src={product.thumbnail}
-            alt={product.description}
-          />
+          <div
+            className={styles.modalProduct__imgWrapper}
+            style={{ position: 'relative', width: '100%', height: 400 }}
+          >
+            <Image
+              src={product.thumbnail}
+              alt={product.description || product.title}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
           <div className={styles.modalProduct__content}>
-            <h2 id="modal-title" className={styles.modalProduct__title}>{product.title}</h2>
+            <h2 id="modal-title" className={styles.modalProduct__title}>
+              {product.title}
+            </h2>
             <ul className={styles.modalProduct__tags}>
               <li className={styles.modalProduct__tag}>{product.category}</li>
               <li className={styles.modalProduct__tag}>{product.brand}</li>
             </ul>
-            <p className={styles.modalProduct__description}>{product.description}</p>
-            <p className={styles.modalProduct__shippingInformation}>Shipping: Ships overnight</p>
-            <p className={styles.modalProduct__returnPolicy}>Return Policy: No return policy</p>
-            <p className={styles.modalProduct__price}>Price: {product.price} $</p>
+            <p className={styles.modalProduct__description}>
+              {product.description}
+            </p>
+            <p className={styles.modalProduct__shippingInformation}>
+              Shipping: Ships overnight
+            </p>
+            <p className={styles.modalProduct__returnPolicy}>
+              Return Policy: No return policy
+            </p>
+            <p className={styles.modalProduct__price}>
+              Price: {product.price} $
+            </p>
             <button className={styles.modalProduct__buyBtn} type="button">
               Купити
             </button>
@@ -120,6 +128,6 @@ export default function Modal({ product, onClose }: ModalProps) {
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
