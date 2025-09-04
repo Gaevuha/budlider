@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Loader from '../components/Loader/Loader';
 import CategoryFilter from '../components/CategoryFilter/CategoryFilter';
 import ProductList from '../components/ProductList/ProductList';
@@ -13,8 +13,8 @@ import {
   fetchProductsByCategory,
   searchUserProducts,
 } from '@/lib/api';
-import styles from './page.module.css';
 import type { Product } from '@/types/product';
+import styles from './HomePageClient.module.css';
 
 const ITEMS_PER_PAGE = 12;
 const STORAGE_KEY = 'budlider_filters';
@@ -23,16 +23,17 @@ export default function HomePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ❗ Всі початкові стани — пусті, відновлення робимо в useEffect
+  // Стани
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('Всі');
   const [currentPage, setCurrentPage] = useState(1);
   const [showLoader, setShowLoader] = useState(true);
   const trimmedSearchQuery = searchQuery.trim();
 
-  // Відновлюємо стан з URL або localStorage
+  // Відновлення стану з URL або localStorage
   useEffect(() => {
-    // localStorage доступний тільки на клієнті
+    if (typeof window === 'undefined') return;
+
     const saved = localStorage.getItem(STORAGE_KEY);
     const parsed = saved ? JSON.parse(saved) : {};
 
@@ -48,16 +49,17 @@ export default function HomePageClient() {
     setCurrentPage(urlPage);
   }, [searchParams]);
 
-  // Зберігаємо стан у localStorage
+  // Зберігання стану в localStorage
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const state = { searchQuery, activeCategory, currentPage };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [searchQuery, activeCategory, currentPage]);
 
-  // Скидаємо сторінку при зміні пошуку або категорії
+  // Скидання сторінки при зміні пошуку або категорії
   useEffect(() => setCurrentPage(1), [activeCategory, trimmedSearchQuery]);
 
-  // Запит категорій
+  // Категорії
   const {
     data: categories = [],
     isLoading: isLoadingCategories,
@@ -67,7 +69,7 @@ export default function HomePageClient() {
     queryFn: fetchCategory,
   });
 
-  // Запит продуктів
+  // Продукти
   const productsQueryKey = useMemo(
     () => ['products', activeCategory, trimmedSearchQuery, currentPage],
     [activeCategory, trimmedSearchQuery, currentPage],
@@ -104,25 +106,35 @@ export default function HomePageClient() {
 
   const hasNoProducts = productsData?.products?.length === 0;
 
-  // Обробка змін через URL
-  const handleSearchChange = (q: string) => {
-    setSearchQuery(q);
+  // 🔹 Обробник пошуку через SearchForm
+  const handleSearchAction = async (formData: FormData) => {
+    const value = (formData.get('searchValue')?.toString() || '').trim();
+    setSearchQuery(value);
+    setCurrentPage(1);
     router.replace(
-      `/?search=${encodeURIComponent(q)}&category=${encodeURIComponent(
+      `/?search=${encodeURIComponent(value)}&category=${encodeURIComponent(
         activeCategory,
       )}&page=1`,
     );
   };
 
+  // 🔹 Обробник категорій
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+    setCurrentPage(1);
+
+    // Якщо обираємо "Всі", скидаємо пошук
+    const newSearchQuery = category === 'Всі' ? '' : searchQuery;
+    if (category === 'Всі') setSearchQuery('');
+
     router.replace(
       `/?search=${encodeURIComponent(
-        searchQuery,
+        newSearchQuery,
       )}&category=${encodeURIComponent(category)}&page=1`,
     );
   };
 
+  // 🔹 Пагінація
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     router.replace(
@@ -135,12 +147,14 @@ export default function HomePageClient() {
   return (
     <section className={styles.section}>
       <div className="container">
+        {/* Фільтр по категоріям */}
         <CategoryFilter
           activeCategory={activeCategory}
           setActiveCategory={handleCategoryChange}
           categories={['Всі', ...categories]}
         />
 
+        {/* Якщо нічого не знайдено */}
         {hasNoProducts ? (
           <div className={styles.notFound}>
             <h2 className={styles.notFoundTitle}>Товари не знайдено</h2>
@@ -153,12 +167,14 @@ export default function HomePageClient() {
           </div>
         ) : (
           <>
+            {/* Список товарів */}
             <ProductList
               activeCategory={activeCategory}
               searchQuery={trimmedSearchQuery}
               products={productsData?.products || []}
             />
 
+            {/* Пагінація */}
             {productsData && productsData.total > ITEMS_PER_PAGE && (
               <Pagination
                 totalItems={productsData.total}

@@ -10,13 +10,10 @@ interface Props {
 export default function SearchForm({ action }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClear = async () => {
+  const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
-      const formData = new FormData();
-      formData.set('searchValue', '');
-      await action(formData); // викликаємо action з порожнім пошуком
-      inputRef.current.focus();
+      action(new FormData()); // Очищаємо пошук
     }
   };
 

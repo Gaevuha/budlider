@@ -31,33 +31,3 @@ export default function Header() {
     </header>
   );
 }
-
-// 'use client';
-
-// import { useSearch } from '@/context/SearchProvider';
-// import Logo from '../Logo/Logo';
-// import ThemeToggle from '../ThemeToggle/ThemeToggle';
-// import SearchForm from '../SearchForm/SearchForm';
-// import Navigation from '../Navigation/Navigation';
-// import Link from 'next/link';
-
-// export default function Header() {
-//   const { setSearchQuery } = useSearch();
-//   const handleSearchChange = (q: string) => {
-//     onSearch(q);
-//   };
-
-//   return (
-//     <header className="container header__container">
-//       <Link className="logo" href="/" aria-label="Site logo">
-//         <Logo />
-//       </Link>
-//       <ThemeToggle />
-//       <SearchForm
-//         setSearchQuery={handleSearchChange}
-//         initialValue={searchQuery}
-//       />
-//       <Navigation />
-//     </header>
-//   );
-// }
