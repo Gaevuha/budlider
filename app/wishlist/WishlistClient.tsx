@@ -77,8 +77,13 @@ export default function WishlistClient() {
                   <Image
                     src={product.thumbnail}
                     alt={product.title}
-                    width={200}
-                    height={200}
+                    width={300}
+                    height={300}
+                    style={{
+                      width: '300px',
+                      height: 'auto',
+                      objectFit: 'contain',
+                    }}
                     className={styles['products__image']}
                     priority={true}
                   />

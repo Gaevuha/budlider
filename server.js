@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:3002' })); // дозволити фронтенд
+app.use(cors({ origin: 'http://localhost:3000' })); // дозволити фронтенд
 app.use(express.json());
 
 let userTheme = 'light'; // зберігаємо останню тему

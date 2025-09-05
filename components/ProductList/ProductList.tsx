@@ -27,8 +27,9 @@ export default function ProductList({ products }: Props) {
             <Image
               src={product.thumbnail}
               alt={product.title}
-              width={200}
-              height={200}
+              width={300}
+              height={300}
+              style={{ width: '300', height: 'auto', objectFit: 'contain' }}
               className={styles['products__image']}
               priority={true}
             />

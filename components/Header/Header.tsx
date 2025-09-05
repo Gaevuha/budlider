@@ -21,13 +21,15 @@ export default function Header() {
   };
 
   return (
-    <header className="container header__container">
-      <Link className="logo" href="/" aria-label="Site logo">
-        <Logo />
-      </Link>
-      <ThemeToggle />
-      <SearchForm action={handleSearch} />
-      <Navigation />
+    <header className="header__section">
+      <div className="container">
+        <Link className="logo" href="/" aria-label="Site logo">
+          <Logo />
+        </Link>
+        <ThemeToggle />
+        <SearchForm action={handleSearch} />
+        <Navigation />
+      </div>
     </header>
   );
 }

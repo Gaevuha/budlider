@@ -13,6 +13,7 @@
     "axios": "^1.11.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "izitoast": "^1.4.0",
     "modern-normalize": "^3.0.1",
     "next": "15.5.2",
     "react": "19.1.0",
