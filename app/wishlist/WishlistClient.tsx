@@ -63,17 +63,17 @@ export default function WishlistClient() {
                   <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
                 </svg>
               </div>
-              <h2 className={styles.notFoundTitle}>Товари не знайдено</h2>
+              <h2 className={styles.notFoundTitle}>
+                Ваш список бажань порожній
+              </h2>
               <p className={styles.notFoundDescription}>
-                Ваш список побажань порожній.
-                <br />
                 Додайте товари, щоб вони з’явились тут.
               </p>
             </div>
           ) : (
             <ul className={styles.products}>
               {products.map(product => (
-                <li key={product.id} className={styles.products__item}>
+                <li key={product.id} className={styles.productsItem}>
                   <Image
                     src={product.thumbnail}
                     alt={product.title}
@@ -84,19 +84,17 @@ export default function WishlistClient() {
                       height: 'auto',
                       objectFit: 'contain',
                     }}
-                    className={styles['products__image']}
+                    className={styles.productsImage}
                     priority={true}
                   />
-                  <p className={styles.products__title}>{product.title}</p>
-                  <p className={styles.products__brand}>
-                    <span className={styles['products__brand--bold']}>
+                  <p className={styles.productsTitle}>{product.title}</p>
+                  <p className={styles.productsBrand}>
+                    <span className={styles.productsBrandBold}>
                       Brand: {product.brand}
                     </span>
                   </p>
-                  <p className={styles.products__category}>
-                    {product.category}
-                  </p>
-                  <p className={styles.products__price}>
+                  <p className={styles.productsCategory}>{product.category}</p>
+                  <p className={styles.productsPrice}>
                     Price: {product.price} грн.
                   </p>
                 </li>
