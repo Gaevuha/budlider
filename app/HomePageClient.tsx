@@ -101,7 +101,8 @@ export default function HomePageClient() {
     } else setShowLoader(true);
   }, [isLoading]);
 
-  if (isError) return <p>Помилка при завантаженні даних</p>;
+  if (isError)
+    return <p className={styles.error}>Помилка при завантаженні даних</p>;
   if (showLoader) return <Loader />;
 
   const hasNoProducts = productsData?.products?.length === 0;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Product } from '../../types/product';
 import styles from './ProductList.module.css';
 import Modal from '../Modal/Modal';
+import Image from 'next/image';
 
 interface Props {
   activeCategory: string;
@@ -23,17 +24,32 @@ export default function ProductList({ products }: Props) {
             className={styles.products__item}
             onClick={() => openModal(product)}
           >
-            <img className={styles.products__image} src={product.thumbnail} alt={product.description} />
+            <Image
+              src={product.thumbnail}
+              alt={product.title}
+              width={200}
+              height={200}
+              className={styles['products__image']}
+              priority={true}
+            />
             <p className={styles.products__title}>{product.title}</p>
             <p className={styles.products__brand}>
-              <span className={styles['products__brand--bold']}>Brand: {product.brand}</span>
+              <span className={styles['products__brand--bold']}>
+                Brand: {product.brand}
+              </span>
             </p>
-            <p className={styles.products__category}>Category: {product.category}</p>
-            <p className={styles.products__price}>Price: {product.price} грн.</p>
+            <p className={styles.products__category}>
+              Category: {product.category}
+            </p>
+            <p className={styles.products__price}>
+              Price: {product.price} грн.
+            </p>
           </li>
         ))}
       </ul>
-      {selectedProduct && <Modal product={selectedProduct} onClose={closeModal} />}
+      {selectedProduct && (
+        <Modal product={selectedProduct} onClose={closeModal} />
+      )}
     </>
   );
 }

@@ -49,7 +49,7 @@ export default function Modal({ product, onClose }: ModalProps) {
 
   const handleWishlistClick = () => {
     if (inWishlist) removeFromWishlist(product.id);
-    else addToWishlist(product.id);
+    else addToWishlist(product);
     setInWishlist(!inWishlist);
   };
 

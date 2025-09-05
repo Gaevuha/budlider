@@ -1,54 +1,49 @@
-import { useWishlist } from '../../hooks/useWishlist';
-import styles from '../CartPage/CartPage.module.css'
+'use client';
+
+import { useWishlist } from '../../context/WishlistContext';
+import styles from './WishlistPage.module.css';
 import Loader from '../../components/Loader/Loader';
 import { useEffect, useState } from 'react';
-import { fetchProductsByIds } from '../../services/productService';
-
-// Тип Product — адаптуй під свій проект, якщо потрібно
+import { fetchProductsByIds } from '@/lib/api';
 import type { Product } from '../../types/product';
+import Image from 'next/image';
 
-export default function WishlistPage() {
-  const { wishlist, isInitialized } = useWishlist();
-  const [showLoader, setShowLoader] = useState(true);
+export default function WishlistClient() {
+  const { wishlist } = useWishlist();
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    if (isInitialized) {
-      // Симуляція затримки для лоадера
-      const timer = setTimeout(() => setShowLoader(false), 1000);
-      return () => clearTimeout(timer);
+    async function fetchProducts() {
+      if (wishlist.length === 0) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const ids = wishlist.map(p => p.id);
+        const loadedProducts = await fetchProductsByIds(ids);
+        setProducts(loadedProducts);
+      } catch (error) {
+        console.error('Помилка при завантаженні товарів:', error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [isInitialized]);
 
-useEffect(() => {
-  if (!isInitialized) return;
+    fetchProducts();
+  }, [wishlist]);
 
-  async function fetchProducts() {
-    if (wishlist.length === 0) {
-      setProducts([]);
-      return;
-    }
-
-    try {
-      const loadedProducts = await fetchProductsByIds(wishlist);
-      setProducts(loadedProducts);
-    } catch (error) {
-      console.error('Помилка при завантаженні товарів:', error);
-    }
-  }
-
-  fetchProducts();
-}, [wishlist, isInitialized]);
-
-  if (!isInitialized || showLoader) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   const hasNoProducts = wishlist.length === 0;
 
   return (
     <section className={styles.section}>
-      <div className={`${styles.container} ${styles.productPage} ${styles.wishlistContainer}`}>
+      <div
+        className={`${styles.container} ${styles.productPage} ${styles.wishlistContainer}`}
+      >
         <main>
           {hasNoProducts ? (
             <div className={styles.notFound}>
@@ -79,10 +74,13 @@ useEffect(() => {
             <ul className={styles.products}>
               {products.map(product => (
                 <li key={product.id} className={styles.products__item}>
-                  <img
-                    className={styles.products__image}
+                  <Image
                     src={product.thumbnail}
-                    alt={product.description}
+                    alt={product.title}
+                    width={200}
+                    height={200}
+                    className={styles['products__image']}
+                    priority={true}
                   />
                   <p className={styles.products__title}>{product.title}</p>
                   <p className={styles.products__brand}>
@@ -90,14 +88,18 @@ useEffect(() => {
                       Brand: {product.brand}
                     </span>
                   </p>
-                  <p className={styles.products__category}>{product.category}</p>
-                  <p className={styles.products__price}>Price: {product.price} грн.</p>
+                  <p className={styles.products__category}>
+                    {product.category}
+                  </p>
+                  <p className={styles.products__price}>
+                    Price: {product.price} грн.
+                  </p>
                 </li>
               ))}
             </ul>
           )}
         </main>
-        </div>
+      </div>
     </section>
   );
 }
