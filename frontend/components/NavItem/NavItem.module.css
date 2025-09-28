@@ -16,7 +16,7 @@
 .nav__link::after {
   content: '';
   position: absolute;
-  bottom: -3px;
+  bottom: 3px;
   left: 50%;
   width: 110%;
   height: 4px;
@@ -63,11 +63,17 @@
     gap: 5px;
     padding: 16px 0;
   }
+  .nav__link::after {
+    bottom: 14px;
+  }
 }
 
 @media screen and (min-width: 1200px) {
   .nav__link {
     padding: 20px 0;
+  }
+  .nav__link::after {
+    bottom: 18px;
   }
   .nav__link:hover,
   .nav__link:focus {
