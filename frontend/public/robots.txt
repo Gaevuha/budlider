@@ -1,0 +1,16 @@
+# Дозволяємо всім пошуковим роботам індексувати сайт
+User-agent: *
+Allow: /
+
+# Дозволяємо спеціально Facebook / Telegram ботам
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# Карта сайту (опційно, якщо є sitemap)
+Sitemap: https://budlider.vercel.app/sitemap.xml
