@@ -1,0 +1,179 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 12px 0;
+  background-color: var(--bg-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  padding: 0px;
+  width: 24px;
+  height: 24px;
+}
+
+.icon__btn {
+  stroke-width: 3;
+  stroke: var(--color-brand);
+  width: 24px;
+  height: 24px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerSearchDesktop {
+  display: none;
+}
+
+/* бекдроп меню */
+.navWrapperBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.3); /* напівпрозорий фон */
+  z-index: 1999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navWrapperBackdrop.open {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Сайдбар меню справа */
+.navWrapper {
+  position: fixed;
+  top: 0;
+  right: -250px; /* ховаємо праворуч, 33% ширини екрану */
+  width: 250px; /* займає 1/3 екрану */
+  height: 100%;
+  background: var(--bg-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 2000;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+}
+
+.navWrapper.open {
+  right: 0; /* виїжджає при відкритті */
+}
+
+.searchSidebarBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* спочатку неактивний */
+}
+
+.searchSidebarBackdrop.open {
+  pointer-events: auto; /* коли відкритий, можна клікати */
+}
+
+/* Сайдбар зліва */
+.searchSidebar {
+  position: fixed;
+  top: 25%;
+  left: -100%; /* ховаємо ліворуч */
+  width: 75%;
+  max-width: 320px;
+  height: 50px;
+  background: transparent;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 8px;
+  transition: left 0.3s ease;
+  z-index: 2000;
+}
+
+.searchSidebar.open {
+  left: 65px; /* виїжджає при відкритті */
+}
+.closeSearch {
+  align-self: flex-end;
+  margin-bottom: 16px;
+}
+
+/* Tablet (768px–1199px) */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  /* .iconBtn {
+    display: inline-flex;
+  } */
+
+  .headerSearchDesktop {
+    display: none; /* 🔹 ховаємо поле пошуку */
+  }
+  .headerActions {
+    margin-left: 24px;
+  }
+  .searchSidebar.open {
+    left: 250px; /* виїжджає при відкритті */
+  }
+
+  .navWrapper {
+    position: static;
+    width: auto;
+    height: auto;
+    flex-direction: row;
+    gap: 24px;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+/* Desktop (≥1200px) */
+@media screen and (min-width: 1200px) {
+  .iconBtn {
+    display: none; /* 🔹 ховаємо іконки */
+  }
+
+  .headerSearchDesktop {
+    display: block;
+    flex: 1;
+    margin-left: 60px;
+  }
+  .headerActions {
+    margin-left: 80px;
+  }
+  .navWrapper {
+    position: static;
+    width: auto;
+    height: auto;
+    flex-direction: row;
+    gap: 24px;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}

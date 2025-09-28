@@ -5,19 +5,29 @@ import { useWishlist } from '@/context/WishlistContext';
 import NavItem from '@/components/NavItem/NavItem';
 import styles from './Navigation.module.css';
 
-export default function Navigation() {
+interface NavigationProps {
+  onLinkClick?: () => void;
+}
+
+export default function Navigation({ onLinkClick }: NavigationProps) {
   const { cart } = useCart();
-  const { wishlist } = useWishlist(); // якщо є wishlist
+  const { wishlist } = useWishlist();
 
   return (
-    <nav>
+    <nav className={styles.nav__menu}>
       <ul className={styles.nav__list}>
-        <NavItem to="/" label="Дім" end />
-        <NavItem to="/cart" label="Кошик" count={cart?.length || 0} />
+        <NavItem to="/" label="Дім" end onClick={onLinkClick} />
+        <NavItem
+          to="/cart"
+          label="Кошик"
+          count={cart?.length || 0}
+          onClick={onLinkClick}
+        />
         <NavItem
           to="/wishlist"
           label="Перелік бажань"
           count={wishlist?.length || 0}
+          onClick={onLinkClick}
         />
       </ul>
     </nav>

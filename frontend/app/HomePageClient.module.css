@@ -13,12 +13,12 @@
 
 .notFoundTitle {
   font-size: 1.5rem;
-  color: #2d3748;
+  color: var(--notfound-title-color);
   margin-bottom: 0.5rem;
 }
 
 .notFoundDescription {
-  color: #4a5568;
+  color: var(--notfound-description-color);
   font-size: 1rem;
   line-height: 1.5;
 }

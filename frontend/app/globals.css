@@ -1,13 +1,29 @@
+/* -------------------------------
+   GLOBAL STYLES
+---------------------------------*/
+
+/* Світла тема за замовчуванням */
 :root {
+  /* Основні кольори */
   --bg-color: #ace6d7;
   --text-color: #242424;
+  --notfound-title-color: #2d3748;
+  --notfound-description-color: #4a5568;
+  --color-dark: #213538;
+  --color-brand: #265e5e;
+  --color-white: #f8f9fa;
+  --btn-clear: #848689;
 
+  /* Іконки / бордери */
+  --icon-color: #265e5e;
+  --border-color: #fff;
+
+  /* Типографіка */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,11 +31,20 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* Темна тема */
 [data-theme='dark'] {
   --bg-color: #1a202c;
   --text-color: #e2e8f0;
+  --notfound-title-color: #e2e8f0;
+  --notfound-description-color: #e2e8f0;
+  --color-dark: #e2e8f0;
+  --color-brand: #e2e8f0;
+  --color-white: #e2e8f0;
 }
 
+/* -------------------------------
+   BODY
+---------------------------------*/
 body {
   margin: 0;
   padding-top: 80px;
@@ -28,6 +53,9 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* -------------------------------
+   TYPOGRAPHY
+---------------------------------*/
 h1,
 h2,
 h3,
@@ -49,21 +77,40 @@ ul {
 }
 
 a {
-  color: currentColor;
+  color: var(--text-color);
   text-decoration: none;
   cursor: pointer;
 }
 
+/* -------------------------------
+   BUTTONS
+---------------------------------*/
 button {
   cursor: pointer;
 }
 
+/* -------------------------------
+   IMAGES
+---------------------------------*/
 img {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
+/* -------------------------------
+   ICONS
+---------------------------------*/
+svg {
+  stroke: var(--icon-color);
+  stroke-width: 2;
+  fill: none;
+  transition: stroke 0.3s ease;
+}
+
+/* -------------------------------
+   VISUALLY HIDDEN
+---------------------------------*/
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -71,72 +118,38 @@ img {
   margin: -1px;
   border: 0;
   padding: 0;
-
   white-space: nowrap;
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
 
+/* -------------------------------
+   LAYOUT
+---------------------------------*/
 .section {
   padding-top: 80px;
   padding-bottom: 80px;
 }
 
-/* Styles for Mobile devices */
 .container {
+  min-width: 320px;
   max-width: 375px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
-/* Styles for Tablet devices */
+/* Tablet */
 @media only screen and (min-width: 768px) {
   .container {
     max-width: 768px;
   }
 }
 
-/* Styles for Desktop devices */
+/* Desktop */
 @media only screen and (min-width: 1200px) {
   .container {
     max-width: 1200px;
     padding: 0 32px;
   }
-}
-
-.header__section {
-  padding: 20px 0;
-
-  position: fixed; /* робимо фіксованим */
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000; /* щоб був зверху всіх елементів */
-
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: var(--bg-color);
-}
-
-.header__section .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.footer {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-}
-.footer__container {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
 }

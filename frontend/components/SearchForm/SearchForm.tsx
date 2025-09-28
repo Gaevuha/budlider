@@ -4,16 +4,17 @@ import { useRef } from 'react';
 import styles from './SearchForm.module.css';
 
 interface Props {
-  action: (formData: FormData) => void;
+  action: (formData: FormData) => void; // Next.js action
 }
 
 export default function SearchForm({ action }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClear = () => {
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // блокуємо спливання
     if (inputRef.current) {
       inputRef.current.value = '';
-      action(new FormData()); // Очищаємо пошук
+      // НЕ викликаємо action при очищенні
     }
   };
 
@@ -21,7 +22,7 @@ export default function SearchForm({ action }: Props) {
     <form
       className={styles['search-form']}
       action={async (formData: FormData) => {
-        await action(formData);
+        await action(formData); // викликаємо тільки при сабміті
       }}
     >
       <input
@@ -32,7 +33,7 @@ export default function SearchForm({ action }: Props) {
         placeholder="Введіть назву товару"
       />
       <button
-        type="button"
+        type="button" // важливо, щоб не був submit
         className={styles['search-form__btn-clear']}
         onClick={handleClear}
         aria-label="Очистити пошук"

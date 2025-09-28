@@ -1,22 +1,16 @@
 .nav__item {
   cursor: pointer;
 }
-
 .nav__link {
   position: relative;
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 24px 0 20px 0;
+  padding: 6px; /*24px 0 20px 0*/
   font-weight: 500;
   letter-spacing: 0.02em;
   transition: color 0.3s ease;
-  color: #213538;
-}
-
-.nav__link:hover,
-.nav__link:focus {
-  color: #265e5e;
+  color: var(--color-dark);
 }
 
 .nav__link::after {
@@ -53,10 +47,35 @@
 }
 
 /* Зміна стилів лічильника при hover або активному */
-.nav__link:hover .nav__count,
+
 .nav__link:focus .nav__count,
 .nav__link--active .nav__count {
   background: #265e5e;
   color: #fff;
   border-color: #265e5e;
+}
+
+@media screen and (min-width: 768px) {
+  .nav__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 16px 0;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .nav__link {
+    padding: 20px 0;
+  }
+  .nav__link:hover,
+  .nav__link:focus {
+    color: #265e5e;
+  }
+  .nav__link:hover .nav__count {
+    background: #265e5e;
+    color: #fff;
+    border-color: #265e5e;
+  }
 }
