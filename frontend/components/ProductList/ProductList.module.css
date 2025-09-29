@@ -24,6 +24,9 @@
 }
 
 .products__image {
+  width: 220px;
+  height: auto;
+  object-fit: contain;
   margin-bottom: 1rem;
   object-fit: cover;
   border-radius: 8px;
@@ -189,4 +192,19 @@
   background-color: #265e5e;
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(255, 107, 10, 0.3);
+}
+
+.swiper {
+  width: 600px;
+  height: 300px;
+}
+
+:global(.swiper-wrapper) {
+  margin-bottom: 24px;
+}
+
+:global(
+    .swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets.swiper-pagination-horizontal
+  ) {
+  top: 420px;
 }

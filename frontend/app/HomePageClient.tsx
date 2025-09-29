@@ -15,6 +15,7 @@ import {
 } from '@/lib/api';
 import type { Product } from '@/types/product';
 import styles from './HomePageClient.module.css';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const ITEMS_PER_PAGE = 12;
 const STORAGE_KEY = 'budlider_filters';
@@ -23,12 +24,14 @@ export default function HomePageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Стани
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('Всі');
   const [currentPage, setCurrentPage] = useState(1);
   const [showLoader, setShowLoader] = useState(true);
   const trimmedSearchQuery = searchQuery.trim();
+
+  // Перевірка, чи десктоп
+  const isDesktop = useMediaQuery('(min-width: 1200px)');
 
   // Відновлення стану з URL або localStorage
   useEffect(() => {
@@ -93,7 +96,6 @@ export default function HomePageClient() {
   const isLoading = isLoadingCategories || isLoadingProducts;
   const isError = isErrorCategories || isErrorProducts;
 
-  // Лоадер із затримкою
   useEffect(() => {
     if (!isLoading) {
       const timer = setTimeout(() => setShowLoader(false), 300);
@@ -107,7 +109,6 @@ export default function HomePageClient() {
 
   const hasNoProducts = productsData?.products?.length === 0;
 
-  // 🔹 Обробник пошуку через SearchForm
   const handleSearchAction = async (formData: FormData) => {
     const value = (formData.get('searchValue')?.toString() || '').trim();
     setSearchQuery(value);
@@ -119,12 +120,9 @@ export default function HomePageClient() {
     );
   };
 
-  // 🔹 Обробник категорій
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
     setCurrentPage(1);
-
-    // Якщо обираємо "Всі", скидаємо пошук
     const newSearchQuery = category === 'Всі' ? '' : searchQuery;
     if (category === 'Всі') setSearchQuery('');
 
@@ -135,7 +133,6 @@ export default function HomePageClient() {
     );
   };
 
-  // 🔹 Пагінація
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     router.replace(
@@ -148,14 +145,12 @@ export default function HomePageClient() {
   return (
     <section className={styles.section}>
       <div className="container">
-        {/* Фільтр по категоріям */}
         <CategoryFilter
           activeCategory={activeCategory}
           setActiveCategory={handleCategoryChange}
           categories={['Всі', ...categories]}
         />
 
-        {/* Якщо нічого не знайдено */}
         {hasNoProducts ? (
           <div className={styles.notFound}>
             <h2 className={styles.notFoundTitle}>Товари не знайдено</h2>
@@ -168,22 +163,27 @@ export default function HomePageClient() {
           </div>
         ) : (
           <>
-            {/* Список товарів */}
             <ProductList
               activeCategory={activeCategory}
               searchQuery={trimmedSearchQuery}
               products={productsData?.products || []}
+              currentPage={currentPage}
+              itemsPerPage={ITEMS_PER_PAGE}
+              totalItems={productsData?.total || 0}
+              onPageChange={handlePageChange}
             />
 
-            {/* Пагінація */}
-            {productsData && productsData.total > ITEMS_PER_PAGE && (
-              <Pagination
-                totalItems={productsData.total}
-                itemsPerPage={ITEMS_PER_PAGE}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              />
-            )}
+            {/* Пагінація тільки на десктопі */}
+            {isDesktop &&
+              productsData &&
+              productsData.total > ITEMS_PER_PAGE && (
+                <Pagination
+                  totalItems={productsData.total}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                />
+              )}
           </>
         )}
       </div>
