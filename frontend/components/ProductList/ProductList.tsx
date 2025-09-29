@@ -20,6 +20,10 @@ interface Props {
   activeCategory: string;
   searchQuery: string;
   products: Product[];
+  currentPage?: number;
+  itemsPerPage?: number;
+  totalItems?: number;
+  onPageChange?: (page: number) => void;
 }
 
 export default function ProductList({ products }: Props) {
