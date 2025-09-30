@@ -72,10 +72,7 @@ export default function Modal({ product, onClose }: ModalProps) {
         ></button>
 
         <div className={styles.modalProduct}>
-          <div
-            className={styles.modalProduct__imgWrapper}
-            style={{ position: 'relative', width: '100%', height: 400 }}
-          >
+          <div className={styles.modalProduct__img}>
             <Image
               src={product.thumbnail}
               alt={product.description || product.title}
@@ -96,13 +93,13 @@ export default function Modal({ product, onClose }: ModalProps) {
               {product.description}
             </p>
             <p className={styles.modalProduct__shippingInformation}>
-              Shipping: Ships overnight
+              Доставка: Доставка на адресу замовника
             </p>
             <p className={styles.modalProduct__returnPolicy}>
-              Return Policy: No return policy
+              Політика повернення: Повернення на протязі 14 днів
             </p>
             <p className={styles.modalProduct__price}>
-              Price: {product.price} $
+              Ціна: {product.price} грн.
             </p>
             <button className={styles.modalProduct__buyBtn} type="button">
               Купити

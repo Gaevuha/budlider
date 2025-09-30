@@ -28,8 +28,23 @@ interface Props {
 
 export default function ProductList({ products }: Props) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const openModal = (product: Product) => setSelectedProduct(product);
-  const closeModal = () => setSelectedProduct(null);
+  const openModal = (product: Product) => {
+    setSelectedProduct(product);
+
+    // 🛑 зупиняємо автоплей слайдера
+    if (swiperRef.current?.autoplay) {
+      swiperRef.current.autoplay.stop();
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+
+    // ▶️ знову запускаємо автоплей
+    if (swiperRef.current?.autoplay) {
+      swiperRef.current.autoplay.start();
+    }
+  };
 
   const isDesktop = useMediaQuery('(min-width: 1200px)');
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1199px)');
