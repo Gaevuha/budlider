@@ -1,15 +1,52 @@
 .wrap-address {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-
+.address-menu {
+  margin-bottom: 12px;
+}
 .footer-text {
   font-weight: 600;
   color: #213538;
+  margin: 0 auto 4px;
+  font-size: 12px;
+}
+.address-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.address-item {
+  line-height: 1.2;
 }
 
-.address-link {
-color: #213538;
+.wrap-address .address-link {
+  color: #213538;
+  text-align: center;
+  font-size: 12px;
+}
+@media screen and (min-width: 768px) {
+  .footer-text {
+    font-size: 14px;
+  }
+
+  .wrap-address .address-link {
+    font-size: 14px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .wrap-address {
+    justify-self: center;
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .footer-text {
+    font-size: 16px;
+  }
+
+  .wrap-address .address-link {
+    font-size: 16px;
+  }
 }

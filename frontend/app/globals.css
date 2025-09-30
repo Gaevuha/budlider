@@ -47,7 +47,7 @@
 ---------------------------------*/
 body {
   margin: 0;
-  padding-top: 80px;
+  padding-top: 54px;
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -144,6 +144,9 @@ svg {
   .container {
     max-width: 768px;
   }
+  body {
+    padding-top: 85px;
+  }
 }
 
 /* Desktop */
@@ -151,5 +154,8 @@ svg {
   .container {
     max-width: 1200px;
     padding: 0 32px;
+  }
+  body {
+    padding-top: 92px;
   }
 }

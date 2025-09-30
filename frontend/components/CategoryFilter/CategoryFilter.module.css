@@ -45,3 +45,10 @@
   background: #fff;
   box-shadow: 0 4px 12px rgba(38, 94, 94, 0.1);
 }
+
+@media screen and (min-width: 768px) {
+  .categories__btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
