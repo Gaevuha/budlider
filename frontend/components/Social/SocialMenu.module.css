@@ -15,7 +15,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #213538;
+  color: var(--color-dark);
   transition: color 0.3s ease;
 }
 
