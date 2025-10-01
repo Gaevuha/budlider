@@ -61,11 +61,11 @@ export default function CartClient() {
                     alt={product.title}
                     width={300}
                     height={300}
-                    style={{
-                      width: '300px',
-                      height: 'auto',
-                      objectFit: 'contain',
-                    }}
+                    // style={{
+                    //   width: '300px',
+                    //   height: 'auto',
+                    //   objectFit: 'contain',
+                    // }}
                     className={styles['products__image']}
                     priority={true}
                   />
@@ -117,7 +117,6 @@ export default function CartClient() {
               </p>
             </div>
           )}
-
           {/* Сайдбар */}
           <aside className={styles.sidebar}>
             <div className={styles['cart-summary']}>

@@ -143,7 +143,7 @@ export default function HomePageClient() {
   };
 
   return (
-    <section className={styles.section}>
+    <section className="section">
       <div className="container">
         <CategoryFilter
           activeCategory={activeCategory}

@@ -117,7 +117,7 @@ export default function ProductList({ products }: Props) {
                 alt={product.title}
                 width={300}
                 height={300}
-                className={styles['products__image']}
+                className={styles.products__image}
                 priority
               />
               <p className={styles.products__title}>{product.title}</p>

@@ -1,13 +1,13 @@
 .product-page {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr;
   gap: 2rem;
 }
 
 /* Сайдбар з підсумком */
 .cart-summary {
   position: sticky;
-  top: 10rem;
+  top: 125px;
   padding: 1.5rem;
   background: #fff;
   border-radius: 12px;
@@ -69,18 +69,8 @@
   transition: all 0.3s ease;
 }
 
-.cart-summary__btn:hover {
-  background: #0b847c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 107, 10, 0.2);
-}
-
 .cart-summary__btn--clear {
   background: #265e5e;
-}
-
-.cart-summary__btn--clear:hover {
-  background: #0b847c;
 }
 
 /* Сітка товарів */
@@ -104,27 +94,18 @@
   align-items: center;
 }
 
-.products__item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(255, 107, 10, 0.15);
-}
-
 .products__card {
   display: flex;
   flex-direction: column;
 }
 
 .products__image {
-  width: 100%;
-  height: 200px;
+  width: 220px;
+  height: auto;
   margin-bottom: 1rem;
   object-fit: cover;
   border-radius: 8px;
   transition: transform 0.3s ease;
-}
-
-.products__item:hover .products__image {
-  transform: scale(1.03);
 }
 
 .products__title {
@@ -133,10 +114,6 @@
   font-size: 1.1rem;
   font-weight: 600;
   transition: color 0.2s ease;
-}
-
-.products__item:hover .products__title {
-  color: #265e5e;
 }
 
 .products__brand,
@@ -169,10 +146,6 @@
   margin-bottom: 20px;
 }
 
-.products__item:hover .products__price {
-  color: #265e5e;
-}
-
 .btn-cart {
   width: 100%;
   padding: 1rem;
@@ -185,10 +158,6 @@
   border: none;
   border-radius: 8px;
   transition: all 0.3s ease;
-}
-
-.btn-cart:hover {
-  background: #0b847c;
 }
 
 /* Повідомлення про відсутність товарів */
@@ -208,10 +177,6 @@
   transition: transform 0.3s ease;
 }
 
-.not-found:hover .not-found__icon {
-  transform: scale(1.05);
-}
-
 .not-found__title {
   margin: 0 0 1rem;
   color: #265e5e;
@@ -224,4 +189,48 @@
   color: #4a5568;
   line-height: 1.6;
   font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .product-page {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .products__image {
+    width: 300px;
+  }
+  .cart-summary {
+    top: 150px;
+  }
+  .cart-summary__btn:hover {
+    background: #0b847c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 10, 0.2);
+  }
+  .cart-summary__btn--clear:hover {
+    background: #0b847c;
+  }
+  .products__item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 107, 10, 0.15);
+  }
+  .products__item:hover .products__image {
+    transform: scale(1.03);
+  }
+  .products__item:hover .products__title {
+    color: #265e5e;
+  }
+  .products__item:hover .products__price {
+    color: #265e5e;
+  }
+  .btn-cart:hover {
+    background: #0b847c;
+  }
+  .not-found:hover .not-found__icon {
+    transform: scale(1.05);
+  }
 }
