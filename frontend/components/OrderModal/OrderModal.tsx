@@ -4,26 +4,31 @@ import { useState } from 'react';
 import styles from './OrderModal.module.css';
 import 'izitoast/dist/css/iziToast.min.css';
 
-interface Props {
+interface OrderModalProps {
+  isOpen: boolean;
   onClose: () => void;
-  clearCart: () => void;
-  totalPrice: number;
+  onConfirm: () => void;
 }
 
-export default function OrderModal({ onClose, clearCart, totalPrice }: Props) {
+export default function OrderModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: OrderModalProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
 
+  if (!isOpen) return null;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const iziToast = (await import('izitoast')).default;
 
     iziToast.success({
       title: 'Успіх!',
-      message: 'Ваше замовлення успішно оформлено. Чекайте на дзвінок',
+      message: 'Ваше замовлення успішно відправлено. Чекайте на дзвінок',
       position: 'topCenter',
       timeout: 3000,
       theme: 'light',
@@ -38,21 +43,20 @@ export default function OrderModal({ onClose, clearCart, totalPrice }: Props) {
       transitionOut: 'fadeOutUp',
     });
 
-    clearCart();
+    onConfirm(); // викликаємо clearCart() з батьківського компонента
     onClose();
   };
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <button className={styles.closeBtn} onClick={onClose}>
+        <button className={styles.close} onClick={onClose}>
           &times;
         </button>
         <h2>Оформлення замовлення</h2>
-        <p>Сума до оплати: {totalPrice.toFixed(2)} грн</p>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <label>
-            Ім'я:
+            Ім&apos;я
             <input
               type="text"
               value={name}
@@ -61,7 +65,7 @@ export default function OrderModal({ onClose, clearCart, totalPrice }: Props) {
             />
           </label>
           <label>
-            E-mail:
+            E-mail
             <input
               type="email"
               value={email}
@@ -70,7 +74,7 @@ export default function OrderModal({ onClose, clearCart, totalPrice }: Props) {
             />
           </label>
           <label>
-            Телефон:
+            Телефон
             <input
               type="tel"
               value={phone}
@@ -79,7 +83,7 @@ export default function OrderModal({ onClose, clearCart, totalPrice }: Props) {
             />
           </label>
           <label>
-            Адреса:
+            Адреса
             <input
               type="text"
               value={address}

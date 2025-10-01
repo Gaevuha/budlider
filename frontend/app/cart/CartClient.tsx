@@ -153,9 +153,9 @@ export default function CartClient() {
       {/* Модальне вікно */}
       {isOrderModalOpen && (
         <OrderModal
+          isOpen={isOrderModalOpen}
           onClose={handleCloseOrderModal}
-          clearCart={clearCart}
-          totalPrice={totalPrice}
+          onConfirm={clearCart}
         />
       )}
     </main>
