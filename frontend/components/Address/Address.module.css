@@ -6,11 +6,11 @@
 .address-menu {
   margin-bottom: 12px;
 }
-.footer-text {
+.address-text {
   font-weight: 600;
   color: #213538;
   margin: 0 auto 4px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .address-list {
   display: flex;
@@ -25,17 +25,9 @@
 .wrap-address .address-link {
   color: #213538;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
 }
-@media screen and (min-width: 768px) {
-  .footer-text {
-    font-size: 14px;
-  }
 
-  .wrap-address .address-link {
-    font-size: 14px;
-  }
-}
 @media screen and (min-width: 1200px) {
   .wrap-address {
     justify-self: center;

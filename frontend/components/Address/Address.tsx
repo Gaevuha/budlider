@@ -3,7 +3,7 @@ import styles from './Address.module.css';
 export default function Address() {
   return (
     <div className={styles['wrap-address']}>
-      <p className={styles['footer-text']}>Контакти:</p>
+      <p className={styles['address-text']}>Контакти:</p>
       <address className={styles['address-menu']}>
         <ul className={styles['address-list']}>
           <li className={styles['address-item']}>
