@@ -21,7 +21,7 @@
   position: relative;
   width: 90%;
   max-width: 800px;
-  max-height: 90vh;
+  max-height: 80vh;
   padding: 2rem;
 
   background: white;
@@ -219,6 +219,22 @@
   transform: scale(0.95);
 }
 
+/* Світла тема */
+.modal__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal__content::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+  border-radius: 8px;
+}
+
+.modal__content::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 8px;
+  border: 3px solid var(--color-scrollbar-thumb);
+}
+
 @media screen and (min-width: 768px) {
   .modalProduct {
     grid-template-columns: 1fr 1fr;
@@ -273,5 +289,9 @@
     background: #265e5e;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 107, 10, 0.2);
+  }
+
+  .modalContent::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }

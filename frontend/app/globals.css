@@ -14,6 +14,9 @@
   --color-white: #f8f9fa;
   --btn-clear: #848689;
 
+  --color-scrollbar-track: #f1f1f1;
+  --color-scrollbar-thumb: #265e5e;
+
   /* Іконки / бордери */
   --icon-color: #265e5e;
   --border-color: #fff;
@@ -40,6 +43,8 @@
   --color-dark: #e2e8f0;
   --color-brand: #e2e8f0;
   --color-white: #e2e8f0;
+
+  --color-scrollbar-track: #222;
 }
 
 /* -------------------------------
