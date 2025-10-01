@@ -6,44 +6,26 @@ import Image from 'next/image';
 import 'izitoast/dist/css/iziToast.min.css';
 import Loader from '@/components/Loader/Loader';
 import { useState, useEffect } from 'react';
+import OrderModal from '@/components/OrderModal/OrderModal'; // додати цей імпорт
 
 export default function CartClient() {
   const { cart, removeFromCart, clearCart } = useCart();
   const [loading, setLoading] = useState(true);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false); // стан модалки
 
   const totalItems = cart?.length ?? 0;
   const totalPrice = cart?.reduce((sum, p) => sum + p.price, 0) ?? 0;
   const totalPriceFixed = totalPrice.toFixed(2);
 
   useEffect(() => {
-    // імітуємо затримку
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);
 
-  // оформлення замовлення
-  const handleCheckout = async () => {
-    const iziToast = (await import('izitoast')).default;
-
-    iziToast.success({
-      title: 'Успіх!',
-      message: 'Ваше замовлення успішно відправлено. Чекайте на дзвінок',
-      position: 'topCenter',
-      timeout: 3000,
-      theme: 'light',
-      overlay: false,
-      maxWidth: 400,
-      titleColor: '#fff',
-      messageColor: '#fff',
-      backgroundColor: '#28a745',
-      icon: 'fa fa-check-circle',
-      iconColor: '#fff',
-      transitionIn: 'fadeInDown',
-      transitionOut: 'fadeOutUp',
-    });
-
-    clearCart();
-  };
+  // відкриваємо модалку
+  const handleOpenOrderModal = () => setIsOrderModalOpen(true);
+  // закриваємо модалку
+  const handleCloseOrderModal = () => setIsOrderModalOpen(false);
 
   return (
     <main>
@@ -61,11 +43,6 @@ export default function CartClient() {
                     alt={product.title}
                     width={300}
                     height={300}
-                    // style={{
-                    //   width: '300px',
-                    //   height: 'auto',
-                    //   objectFit: 'contain',
-                    // }}
                     className={styles['products__image']}
                     priority={true}
                   />
@@ -155,7 +132,7 @@ export default function CartClient() {
                   <>
                     <button
                       className={styles['cart-summary__btn']}
-                      onClick={handleCheckout}
+                      onClick={handleOpenOrderModal} // відкриваємо модалку
                     >
                       Оформити замовлення
                     </button>
@@ -172,6 +149,15 @@ export default function CartClient() {
           </aside>
         </div>
       </section>
+
+      {/* Модальне вікно */}
+      {isOrderModalOpen && (
+        <OrderModal
+          onClose={handleCloseOrderModal}
+          clearCart={clearCart}
+          totalPrice={totalPrice}
+        />
+      )}
     </main>
   );
 }
