@@ -36,14 +36,38 @@
   gap: 1rem;
 }
 
-.form label {
+.inputWrapper {
   display: flex;
-  flex-direction: column;
-  font-weight: 500;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.inputWrapper input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.icon {
+  font-size: 18px;
+  fill: #d1d5db;
+}
+
+.inputWrapper:focus-within .icon {
+  fill: #265e5e;
+}
+.inputWrapper:focus-within {
+  border: 1px solid #265e5e;
 }
 
 .submitBtn {
-  background-color: #28a745;
+  background-color: #265e5e;
   color: #fff;
   padding: 0.75rem;
   border: none;
@@ -51,4 +75,6 @@
   cursor: pointer;
   font-weight: 600;
   margin-top: 1rem;
+}
+@media screen and (min-width: ) {
 }

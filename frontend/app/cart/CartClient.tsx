@@ -6,7 +6,7 @@ import Image from 'next/image';
 import 'izitoast/dist/css/iziToast.min.css';
 import Loader from '@/components/Loader/Loader';
 import { useState, useEffect } from 'react';
-import OrderModal from '@/components/OrderModal/OrderModal'; // додати цей імпорт
+import OrderModal from '@/components/OrderModal/OrderModalClient'; // додати цей імпорт
 
 export default function CartClient() {
   const { cart, removeFromCart, clearCart } = useCart();
