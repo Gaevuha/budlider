@@ -6,15 +6,24 @@ import Image from 'next/image';
 import 'izitoast/dist/css/iziToast.min.css';
 import Loader from '@/components/Loader/Loader';
 import { useState, useEffect } from 'react';
-import OrderModal from '@/components/OrderModal/OrderModalClient'; // додати цей імпорт
+import OrderModal from '@/components/OrderModal/OrderModalClient';
 
 export default function CartClient() {
-  const { cart, removeFromCart, clearCart } = useCart();
-  const [loading, setLoading] = useState(true);
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false); // стан модалки
+  const {
+    cart,
+    removeFromCart,
+    clearCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useCart();
 
-  const totalItems = cart?.length ?? 0;
-  const totalPrice = cart?.reduce((sum, p) => sum + p.price, 0) ?? 0;
+  const [loading, setLoading] = useState(true);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  // ✅ враховує кількість товарів
+  const totalItems = cart?.reduce((sum, p) => sum + (p.quantity || 1), 0) ?? 0;
+  const totalPrice =
+    cart?.reduce((sum, p) => sum + p.price * (p.quantity || 1), 0) ?? 0;
   const totalPriceFixed = totalPrice.toFixed(2);
 
   useEffect(() => {
@@ -22,9 +31,7 @@ export default function CartClient() {
     return () => clearTimeout(timer);
   }, []);
 
-  // відкриваємо модалку
   const handleOpenOrderModal = () => setIsOrderModalOpen(true);
-  // закриваємо модалку
   const handleCloseOrderModal = () => setIsOrderModalOpen(false);
 
   return (
@@ -57,6 +64,7 @@ export default function CartClient() {
                     Категорія: beauty
                   </p>
                   <p className={styles['products__price']}>{product.price} $</p>
+
                   <button
                     className={styles['btn-cart']}
                     onClick={() => removeFromCart(product.id)}
@@ -94,6 +102,7 @@ export default function CartClient() {
               </p>
             </div>
           )}
+
           {/* Сайдбар */}
           <aside className={styles.sidebar}>
             <div className={styles['cart-summary']}>
@@ -102,14 +111,35 @@ export default function CartClient() {
                   Ваше замовлення
                 </h2>
                 <ul className={styles['cart-summary__list']}>
-                  <li className={styles['cart-summary__item']}>
-                    <span className={styles['cart-summary__label']}>
-                      Кількість:
-                    </span>
-                    <span className={styles['cart-summary__value']}>
-                      {totalItems}
-                    </span>
-                  </li>
+                  {cart.map(product => (
+                    <li
+                      key={product.id}
+                      className={styles['cart-summary__item']}
+                    >
+                      <span className={styles['cart-summary__label']}>
+                        {product.title}:
+                      </span>
+                      <div className={styles['cart-summary__value-wrapper']}>
+                        <button
+                          className={styles['quantity-btn']}
+                          onClick={() => decreaseQuantity(product.id)}
+                        >
+                          −
+                        </button>
+                        <span className={styles['cart-summary__value']}>
+                          {product.quantity}
+                        </span>
+                        <button
+                          className={styles['quantity-btn']}
+                          onClick={() => increaseQuantity(product.id)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+
+                  {/* ✅ сума оновлюється динамічно */}
                   <li className={styles['cart-summary__item']}>
                     <span className={styles['cart-summary__label']}>
                       Всього до сплати:
@@ -118,6 +148,7 @@ export default function CartClient() {
                       {totalPriceFixed} грн.
                     </span>
                   </li>
+
                   <li className={styles['cart-summary__item']}>
                     <span className={styles['cart-summary__label']}>
                       Доставка:
@@ -128,11 +159,11 @@ export default function CartClient() {
                   </li>
                 </ul>
 
-                {totalItems > 0 && (
+                {cart.length > 0 && (
                   <>
                     <button
                       className={styles['cart-summary__btn']}
-                      onClick={handleOpenOrderModal} // відкриваємо модалку
+                      onClick={handleOpenOrderModal}
                     >
                       Оформити замовлення
                     </button>
