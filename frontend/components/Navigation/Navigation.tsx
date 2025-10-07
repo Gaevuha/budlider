@@ -16,7 +16,7 @@ export default function Navigation({ onLinkClick }: NavigationProps) {
   return (
     <nav className={styles.nav__menu}>
       <ul className={styles.nav__list}>
-        <NavItem to="/" label="Дім" end onClick={onLinkClick} />
+        <NavItem to="/products" label="Каталог" end onClick={onLinkClick} />
         <NavItem
           to="/cart"
           label="Кошик"

@@ -1,5 +1,4 @@
 // app/not-found.tsx
-import css from '../app/HomePageClient.module.css';
 import type { Metadata } from 'next';
 import NotFoundRedirect from './NotFoundRedirect';
 
@@ -24,9 +23,9 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className={css.notFound}>
-      <h1 className={css.title}>404 - Page not found</h1>
-      <p className={css.description}>
+    <div className="notFound">
+      <h1 className="title">404 - Page not found</h1>
+      <p className="description">
         Sorry, the page you are looking for does not exist.
       </p>
       <NotFoundRedirect />

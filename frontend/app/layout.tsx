@@ -4,6 +4,7 @@ import Footer from '@/components/Footer/Footer';
 import { WishlistProvider } from '@/context/WishlistContext';
 import { CartProvider } from '@/context/CartContext';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
+import { Geist, Geist_Mono } from 'next/font/google';
 
 import 'modern-normalize';
 import './globals.css';
@@ -11,6 +12,16 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+});
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: 'Будлідер — Інтернет-магазин будівельних матеріалів',
@@ -58,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uk">
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
           <CartProvider>
             <WishlistProvider>

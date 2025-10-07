@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { Product } from '../types/product';
 
-axios.defaults.baseURL = 'https://dummyjson.com/products';
+const API_BASE = 'https://dummyjson.com';
+axios.defaults.baseURL = API_BASE;
 
 export interface ProductsResponse {
   products: Product[];
@@ -13,11 +14,10 @@ export interface ProductsResponse {
 /**
  * Завантажити список категорій товарів
  */
-export const fetchCategory = async (): Promise<string[]> => {
+export const fetchCategories = async (): Promise<string[]> => {
   try {
-    const result = await axios.get<string[]>('/category-list');
-
-    return result.data;
+    const res = await axios.get<string[]>('/products/category-list');
+    return res.data;
   } catch (error) {
     if (error instanceof Error) {
       console.error('Помилка при завантаженні категорій:', error.message);
@@ -30,7 +30,6 @@ export const fetchCategory = async (): Promise<string[]> => {
 
 /**
  * Завантажити товари з усієї бази (пагінація)
- * @param currentPage - поточна сторінка (для пагінації)
  */
 export async function fetchProducts(
   currentPage = 1,
@@ -39,14 +38,12 @@ export async function fetchProducts(
     limit: 12,
     skip: (currentPage - 1) * 12,
   };
-  const res = await axios.get<ProductsResponse>('', { params });
+  const res = await axios.get<ProductsResponse>('/products', { params });
   return res.data;
 }
 
 /**
  * Завантажити товари за категорією (пагінація)
- * @param categoryName - назва категорії (наприклад, 'smartphones')
- * @param currentPage - поточна сторінка
  */
 export async function fetchProductsByCategory(
   categoryName: string,
@@ -57,40 +54,39 @@ export async function fetchProductsByCategory(
     skip: (currentPage - 1) * 12,
   };
 
-  // Якщо категорія ALL, отримуємо всі товари
-  let endPoint = `/category/${categoryName}`;
-  if (categoryName.toUpperCase() === 'ALL') {
-    endPoint = '';
+  let endpoint = `/products/category/${categoryName}`;
+  if (
+    categoryName.toUpperCase() === 'ВСІ' ||
+    categoryName.toUpperCase() === 'ALL'
+  ) {
+    endpoint = '/products';
   }
 
-  const res = await axios.get<ProductsResponse>(endPoint, { params });
+  const res = await axios.get<ProductsResponse>(endpoint, { params });
   return res.data;
 }
 
 /**
  * Завантажити товар по його ID
- * @param id - ідентифікатор товару
  */
 export async function fetchProductById(id: number): Promise<Product> {
-  const res = await axios.get<Product>(`/${id}`);
+  const res = await axios.get<Product>(`/products/${id}`);
   return res.data;
 }
 
 /**
  * Пошук товарів за назвою (пагінація)
- * @param searchQuery - текст для пошуку
- * @param currentPage - поточна сторінка
  */
 export async function searchUserProducts(
   searchQuery: string,
   currentPage = 1,
 ): Promise<ProductsResponse> {
   const params = {
+    q: searchQuery,
     limit: 12,
     skip: (currentPage - 1) * 12,
-    q: searchQuery,
   };
-  const res = await axios.get<ProductsResponse>('/search', { params });
+  const res = await axios.get<ProductsResponse>('/products/search', { params });
   return res.data;
 }
 

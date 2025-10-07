@@ -1,0 +1,143 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+/* === HERO === */
+.hero {
+  padding: 40px 0;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.heroBtn {
+  display: inline-block;
+  background: var(--color-brand);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+/* === СЕКЦІЇ === */
+.sectionTitle {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.text {
+  max-width: 800px;
+  margin: 0 auto 1rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* === ПОСЛУГИ === */
+.servicesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.serviceCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+/* === ПРОДУКТИ === */
+.productsBtn {
+  display: block;
+  width: 245px;
+  margin: 24px auto 0;
+  text-align: center;
+  background: var(--color-brand);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+/* === ПРО НАС === */
+.about {
+  padding: 40px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.subTitle {
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  text-align: center;
+}
+
+.featuresList {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  list-style: disc;
+  padding-left: 1.5rem;
+  line-height: 1.8;
+}
+
+/* === OVERLAY === */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  z-index: 1000;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* === АДАПТИВ === */
+@media screen and (min-width: 768px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.6rem;
+  }
+
+  .text {
+    padding: 0 1rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .heroBtn:hover,
+  .productsBtn:hover {
+    background: #0b847c;
+  }
+  .serviceCard:hover {
+    transform: translateY(-4px);
+  }
+}

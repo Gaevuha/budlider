@@ -18,7 +18,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 interface Props {
   activeCategory: string;
-  searchQuery: string;
+  searchQuery?: string;
   products: Product[];
   currentPage?: number;
   itemsPerPage?: number;

@@ -9,7 +9,7 @@ import Loader from '@/components/Loader/Loader';
 
 export default function WishlistClient() {
   const { wishlist, removeFromWishlist, clearWishlist } = useWishlistContext();
-  const { cart, addToCart, isInCart } = useCart(); // підключаємо CartContext
+  const { addToCart, isInCart } = useCart(); // підключаємо CartContext
   const [loading, setLoading] = useState(true);
 
   // імітуємо завантаження
