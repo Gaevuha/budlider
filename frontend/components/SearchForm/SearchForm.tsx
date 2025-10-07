@@ -1,24 +1,27 @@
 'use client';
 
 import { useRef } from 'react';
-import styles from './SearchForm.module.css';
-import { fetchProducts } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import { fetchProducts } from '@/lib/api';
+import styles from './SearchForm.module.css';
 
 export default function SearchForm() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  // Очистка поля
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (inputRef.current) inputRef.current.value = '';
   };
 
+  // Форма Next.js action через FormData
   const handleSearch = async (formData: FormData) => {
     const value = formData.get('searchValue')?.toString().trim();
     if (!value) return;
 
     try {
+      // Отримуємо продукти через API
       const result = await fetchProducts(1);
       const filtered = result.products.filter(p =>
         p.title.toLowerCase().includes(value.toLowerCase()),
@@ -27,11 +30,10 @@ export default function SearchForm() {
       if (filtered.length > 0) {
         router.push(`/products?search=${encodeURIComponent(value)}`);
       } else {
-        // Передаємо query для показу повідомлення
-        router.push(`/?notfound=true`);
+        router.push('/?notfound=true');
       }
     } catch {
-      router.push(`/?error=true`);
+      router.push('/?error=true');
     }
   };
 

@@ -77,7 +77,7 @@ export default function Header() {
           {isDesktop && (
             <>
               <div className={styles.headerSearchDesktop}>
-                <SearchForm action={handleSearch} />
+                <SearchForm />
               </div>
               <Navigation />
             </>
@@ -109,7 +109,7 @@ export default function Header() {
             >
               <FiX size={24} />
             </button>
-            <SearchForm action={handleSearch} />
+            <SearchForm />
           </div>
         </div>
       )}
