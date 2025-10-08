@@ -5,23 +5,24 @@ import { useRouter } from 'next/navigation';
 import { fetchProducts } from '@/lib/api';
 import styles from './SearchForm.module.css';
 
-export default function SearchForm() {
+interface SearchFormProps {
+  onClose?: () => void;
+}
+
+export default function SearchForm({ onClose }: SearchFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // Очистка поля
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (inputRef.current) inputRef.current.value = '';
   };
 
-  // Форма Next.js action через FormData
   const handleSearch = async (formData: FormData) => {
     const value = formData.get('searchValue')?.toString().trim();
     if (!value) return;
 
     try {
-      // Отримуємо продукти через API
       const result = await fetchProducts(1);
       const filtered = result.products.filter(p =>
         p.title.toLowerCase().includes(value.toLowerCase()),
@@ -32,8 +33,11 @@ export default function SearchForm() {
       } else {
         router.push('/?notfound=true');
       }
+
+      onClose?.(); // ✅ Закриваємо панель після пошуку
     } catch {
       router.push('/?error=true');
+      onClose?.();
     }
   };
 

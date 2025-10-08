@@ -109,7 +109,7 @@ export default function Header() {
             >
               <FiX size={24} />
             </button>
-            <SearchForm />
+            <SearchForm onClose={() => setIsSearchOpen(false)} /> {/* ✅ */}
           </div>
         </div>
       )}
