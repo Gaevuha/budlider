@@ -69,22 +69,41 @@ export default function HomeClient() {
                 alt="Екскаватор"
                 width={200}
                 height={200}
+                priority
               />
               <h3>Екскаватор</h3>
               <p>Копання котлованів, траншей, планування ділянки.</p>
             </li>
             <li className={styles.serviceCard}>
-              <Image src="/crane.jpg" alt="Кран" width={200} height={200} />
+              <Image
+                src="/crane.jpg"
+                alt="Кран"
+                width={200}
+                height={200}
+                priority
+              />
               <h3>Кран</h3>
               <p>Підйом вантажів та монтаж конструкцій будь-якої складності.</p>
             </li>
             <li className={styles.serviceCard}>
-              <Image src="/manitou.jpg" alt="Маніту" width={200} height={200} />
+              <Image
+                src="/manitou.jpg"
+                alt="Маніту"
+                width={200}
+                height={200}
+                priority
+              />
               <h3>Маніту</h3>
               <p>Телескопічний навантажувач для складів та майданчиків.</p>
             </li>
             <li className={styles.serviceCard}>
-              <Image src="/truck.jpg" alt="Самоскид" width={200} height={200} />
+              <Image
+                src="/truck.jpg"
+                alt="Самоскид"
+                width={200}
+                height={200}
+                priority
+              />
               <h3>Самоскид</h3>
               <p>Перевезення піску, щебеню, ґрунту та інших матеріалів.</p>
             </li>

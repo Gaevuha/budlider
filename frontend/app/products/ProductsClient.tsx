@@ -1,88 +1,108 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import {
+  useCategories,
+  useProducts,
+  useProductsByCategory,
+  useSearchProducts,
+} from '@/hooks/useProducts';
+import type { ProductsResponse } from '@/lib/api';
 import CategoryFilter from '@/components/CategoryFilter/CategoryFilter';
 import ProductList from '@/components/ProductList/ProductList';
 import Pagination from '@/components/Pagination/Pagination';
-import type { ProductsResponse } from '@/lib/api';
+import Loader from '@/components/Loader/Loader';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import Loader from '@/components/Loader/Loader'; // ✅ використання CSS Loader
+import ErrorComponent from './error'; // твій компонент
 
 interface Props {
-  categories: string[];
-  initialData: ProductsResponse;
-  activeCategory: string;
-  currentPage: number;
-  searchQuery: string;
+  initialSearch?: string;
 }
 
 const ITEMS_PER_PAGE = 12;
 
-export default function ProductsClient({
-  categories,
-  initialData,
-  activeCategory: initialCategory,
-  currentPage: initialPage,
-}: Props) {
-  const [activeCategory, setActiveCategory] = useState(initialCategory);
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+export default function ProductsClient({ initialSearch = '' }: Props) {
+  const [page, setPage] = useState(1);
+  const [category, setCategory] = useState('Всі');
+  const [search, setSearch] = useState(initialSearch);
 
   const isDesktop = useMediaQuery('(min-width: 1200px)');
 
-  // імітуємо завантаження
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, []);
+    if (initialSearch) setCategory('Всі'); // скидаємо категорію при пошуку
+  }, [initialSearch]);
 
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-    setCurrentPage(1);
+  const categoriesQuery = useCategories();
+  const allProductsQuery = useProducts(page);
+  const categoryProductsQuery = useProductsByCategory(category, page);
+  const searchProductsQuery = useSearchProducts(search, page);
 
-    const params = new URLSearchParams();
-    params.set('category', category);
-    params.set('page', '1');
-    router.push(`/products?${params.toString()}`);
+  let data: ProductsResponse | undefined;
+  let isLoading = false;
+  let isError = false;
+  let error: unknown = null;
+  let refetch: () => void = () => {};
+
+  if (search) {
+    data = searchProductsQuery.data;
+    isLoading = searchProductsQuery.isLoading;
+    isError = searchProductsQuery.isError;
+    error = searchProductsQuery.error;
+    refetch = searchProductsQuery.refetch;
+  } else if (category !== 'Всі') {
+    data = categoryProductsQuery.data;
+    isLoading = categoryProductsQuery.isLoading;
+    isError = categoryProductsQuery.isError;
+    error = categoryProductsQuery.error;
+    refetch = categoryProductsQuery.refetch;
+  } else {
+    data = allProductsQuery.data;
+    isLoading = allProductsQuery.isLoading;
+    isError = allProductsQuery.isError;
+    error = allProductsQuery.error;
+    refetch = allProductsQuery.refetch;
+  }
+
+  if (categoriesQuery.isLoading || isLoading) return <Loader />;
+
+  if (categoriesQuery.isError || isError)
+    return (
+      <ErrorComponent
+        error={error instanceof Error ? error : new Error('Невідома помилка')}
+        reset={refetch}
+      />
+    );
+
+  const handleCategoryChange = (cat: string) => {
+    setCategory(cat);
+    setPage(1);
+    setSearch(''); // очищуємо пошук при зміні категорії
   };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-
-    const params = new URLSearchParams();
-    params.set('category', activeCategory);
-    params.set('page', page.toString());
-    router.push(`/products?${params.toString()}`);
-  };
-
-  if (loading) return <Loader />; // ✅ показуємо Loader поки завантажується
 
   return (
     <section className="section">
       <div className="container">
         <CategoryFilter
-          categories={['Всі', ...categories]}
-          activeCategory={activeCategory}
+          categories={['Всі', ...(categoriesQuery.data || [])]}
+          activeCategory={category}
           setActiveCategory={handleCategoryChange}
         />
 
         <ProductList
-          products={initialData.products}
-          currentPage={currentPage}
+          products={data?.products || []}
+          currentPage={page}
           itemsPerPage={ITEMS_PER_PAGE}
-          totalItems={initialData.total}
-          activeCategory={activeCategory}
-          onPageChange={handlePageChange}
+          totalItems={data?.total || 0}
+          activeCategory={category}
+          onPageChange={setPage}
         />
 
-        {isDesktop && initialData.total > ITEMS_PER_PAGE && (
+        {isDesktop && data && data.total > ITEMS_PER_PAGE && (
           <Pagination
-            totalItems={initialData.total}
+            totalItems={data.total}
             itemsPerPage={ITEMS_PER_PAGE}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
+            currentPage={page}
+            onPageChange={setPage}
           />
         )}
       </div>

@@ -28,30 +28,22 @@ interface Props {
 
 export default function ProductList({ products }: Props) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const openModal = (product: Product) => {
-    setSelectedProduct(product);
-
-    // 🛑 зупиняємо автоплей слайдера
-    if (swiperRef.current?.autoplay) {
-      swiperRef.current.autoplay.stop();
-    }
-  };
-
-  const closeModal = () => {
-    setSelectedProduct(null);
-
-    // ▶️ знову запускаємо автоплей
-    if (swiperRef.current?.autoplay) {
-      swiperRef.current.autoplay.start();
-    }
-  };
+  const swiperRef = useRef<SwiperClass | null>(null);
 
   const isDesktop = useMediaQuery('(min-width: 1200px)');
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1199px)');
 
-  const swiperRef = useRef<SwiperClass | null>(null);
+  const openModal = (product: Product) => {
+    setSelectedProduct(product);
+    swiperRef.current?.autoplay?.stop();
+  };
 
-  const MAX_DISTANCE = 6; // ⚡ тут регулюєш радіус впливу
+  const closeModal = () => {
+    setSelectedProduct(null);
+    swiperRef.current?.autoplay?.start();
+  };
+
+  const MAX_DISTANCE = 6; /*15 */
 
   const updateBullets = useCallback((swiper?: SwiperClass | null) => {
     const s = swiper ?? swiperRef.current;
@@ -64,13 +56,11 @@ export default function ProductList({ products }: Props) {
 
     const activeIndex =
       typeof s.realIndex === 'number' ? s.realIndex : s.activeIndex ?? 0;
-    const total = bullets.length;
 
-    const MAX_DISTANCE = 15; // скільки булетів від активного зменшуємо
-    const MIN_SIZE = 2; // мінімальний розмір
-    const MAX_SIZE = 12; // розмір активного
-    const MIN_OPACITY = 0.2; // прозорість на віддалених
-    const MAX_OPACITY = 1; // активний
+    const MIN_SIZE = 2;
+    const MAX_SIZE = 12;
+    const MIN_OPACITY = 0.2;
+    const MAX_OPACITY = 1;
 
     bullets.forEach((b, i) => {
       const distance = Math.min(Math.abs(i - activeIndex), MAX_DISTANCE);
@@ -102,6 +92,7 @@ export default function ProductList({ products }: Props) {
     }
   }, [products, updateBullets]);
 
+  // Desktop view
   if (isDesktop) {
     return (
       <>
@@ -142,6 +133,10 @@ export default function ProductList({ products }: Props) {
     );
   }
 
+  // Tablet/Mobile view
+  const slidesPerView = isTablet ? Math.min(products.length, 2) : 1;
+  const enableLoop = products.length > slidesPerView;
+
   return (
     <>
       <Swiper
@@ -151,9 +146,9 @@ export default function ProductList({ products }: Props) {
         navigation={isTablet}
         pagination={{ clickable: true }}
         spaceBetween={20}
-        slidesPerView={isTablet ? 2 : 1}
+        slidesPerView={slidesPerView}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loop={true}
+        loop={enableLoop}
       >
         {products.map(product => (
           <SwiperSlide key={product.id}>
