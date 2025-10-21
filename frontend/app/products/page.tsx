@@ -1,11 +1,37 @@
+import { fetchProductsClient, fetchCategoriesClient } from '@/lib/clientApi';
 import ProductsClient from './ProductsClient';
 
-interface ProductsPageProps {
-  searchParams?: { search?: string };
+interface SearchParams {
+  page?: string;
+  category?: string;
+  search?: string;
 }
 
-export default function ProductsPage({ searchParams }: ProductsPageProps) {
-  const searchQuery = searchParams?.search || '';
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: SearchParams | Promise<SearchParams>; // може бути Promise
+}) {
+  // 🔹 Якщо це Promise, чекаємо
+  const params = 'then' in searchParams ? await searchParams : searchParams;
 
-  return <ProductsClient initialSearch={searchQuery} />;
+  const page = Number(params?.page) || 1;
+  const category = params?.category || 'all';
+  const search = params?.search || '';
+
+  console.log('Server searchParams:', params, page, category, search);
+
+  const [initialProducts, initialCategories] = await Promise.all([
+    fetchProductsClient(page, category, search),
+    fetchCategoriesClient(),
+  ]);
+
+  return (
+    <ProductsClient
+      initialProducts={initialProducts}
+      initialCategories={initialCategories}
+      initialSearch={search}
+      initialPage={page}
+    />
+  );
 }

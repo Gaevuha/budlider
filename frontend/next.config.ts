@@ -1,14 +1,15 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  trailingSlash: false,
   images: {
-    domains: ['cdn.dummyjson.com', 'budlider.vercel.app'], // домен для картинок
+    domains: ['cdn.dummyjson.com', 'budlider.vercel.app'],
   },
   async rewrites() {
     return [
       {
-        source: '/:path*', // всі запити на /api/*
-        destination: 'http://localhost:5000/:path*', // проксируються на бекенд
+        source: '/backend/:path*', // всі запити на /backend/*
+        destination: 'http://localhost:5000/:path*', // проксі на Node.js
       },
     ];
   },

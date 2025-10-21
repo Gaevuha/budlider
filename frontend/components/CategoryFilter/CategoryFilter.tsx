@@ -1,11 +1,12 @@
 'use client';
 
 import styles from './CategoryFilter.module.css';
+import type { Category } from '@/types/product';
 
 interface Props {
   activeCategory: string;
-  setActiveCategory: (category: string) => void;
-  categories: string[];
+  setActiveCategory: (slug: string) => void;
+  categories: Category[];
 }
 
 export default function CategoryFilter({
@@ -16,17 +17,17 @@ export default function CategoryFilter({
   return (
     <ul className={styles.categories}>
       {categories.map(category => (
-        <li key={category} className={styles.categories__item}>
+        <li key={String(category.slug)} className={styles.categories__item}>
           <button
             type="button"
-            onClick={() => setActiveCategory(category)}
+            onClick={() => setActiveCategory(String(category.slug))}
             className={`${styles.categories__btn} ${
-              activeCategory === category
+              activeCategory === category.slug
                 ? styles['categories__btn--active']
                 : ''
             }`}
           >
-            {category}
+            {category.name}
           </button>
         </li>
       ))}

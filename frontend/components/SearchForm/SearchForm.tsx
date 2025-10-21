@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchProducts } from '@/lib/api';
+import { fetchProductsClient } from '@/lib/clientApi';
 import styles from './SearchForm.module.css';
 
 interface SearchFormProps {
@@ -23,7 +23,7 @@ export default function SearchForm({ onClose }: SearchFormProps) {
     if (!value) return;
 
     try {
-      const result = await fetchProducts(1);
+      const result = await fetchProductsClient(1);
       const filtered = result.products.filter(p =>
         p.title.toLowerCase().includes(value.toLowerCase()),
       );

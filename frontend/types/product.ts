@@ -11,3 +11,9 @@ export interface Product {
   thumbnail: string;
   images: string[];
 }
+
+export interface Category {
+  slug: string;
+  name: string;
+  url: string;
+}

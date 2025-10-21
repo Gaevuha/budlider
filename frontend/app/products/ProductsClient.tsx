@@ -1,108 +1,136 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  useCategories,
-  useProducts,
-  useProductsByCategory,
-  useSearchProducts,
-} from '@/hooks/useProducts';
-import type { ProductsResponse } from '@/lib/api';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import type { Category } from '@/types/product';
+import type { ProductsResponseClient } from '@/lib/clientApi';
+import { fetchProductsClient } from '@/lib/clientApi';
+
 import CategoryFilter from '@/components/CategoryFilter/CategoryFilter';
 import ProductList from '@/components/ProductList/ProductList';
 import Pagination from '@/components/Pagination/Pagination';
 import Loader from '@/components/Loader/Loader';
+import ErrorComponent from './error';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import ErrorComponent from './error'; // твій компонент
 
 interface Props {
+  initialProducts: ProductsResponseClient;
+  initialCategories: Category[];
   initialSearch?: string;
+  initialPage?: number;
 }
 
 const ITEMS_PER_PAGE = 12;
 
-export default function ProductsClient({ initialSearch = '' }: Props) {
-  const [page, setPage] = useState(1);
-  const [category, setCategory] = useState('Всі');
-  const [search, setSearch] = useState(initialSearch);
+export default function ProductsClient({
+  initialCategories,
+  initialSearch = '',
+  initialPage = 1,
+}: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [page, setPage] = useState(initialPage);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [search, setSearch] = useState(initialSearch || '');
 
   const isDesktop = useMediaQuery('(min-width: 1200px)');
 
+  // ---- Ініціалізація state з URL при першому рендері ----
   useEffect(() => {
-    if (initialSearch) setCategory('Всі'); // скидаємо категорію при пошуку
-  }, [initialSearch]);
+    const s = searchParams.get('search') || '';
+    const c = searchParams.get('category') || 'all';
+    const p = Number(searchParams.get('page')) || 1;
 
-  const categoriesQuery = useCategories();
-  const allProductsQuery = useProducts(page);
-  const categoryProductsQuery = useProductsByCategory(category, page);
-  const searchProductsQuery = useSearchProducts(search, page);
+    setSearch(s);
+    setActiveCategory(c);
+    setPage(p);
+  }, [searchParams]);
 
-  let data: ProductsResponse | undefined;
-  let isLoading = false;
-  let isError = false;
-  let error: unknown = null;
-  let refetch: () => void = () => {};
+  // ---- React Query для завантаження продуктів ----
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['products', page, activeCategory, search],
+    queryFn: () => fetchProductsClient(page, activeCategory, search),
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+  });
 
-  if (search) {
-    data = searchProductsQuery.data;
-    isLoading = searchProductsQuery.isLoading;
-    isError = searchProductsQuery.isError;
-    error = searchProductsQuery.error;
-    refetch = searchProductsQuery.refetch;
-  } else if (category !== 'Всі') {
-    data = categoryProductsQuery.data;
-    isLoading = categoryProductsQuery.isLoading;
-    isError = categoryProductsQuery.isError;
-    error = categoryProductsQuery.error;
-    refetch = categoryProductsQuery.refetch;
-  } else {
-    data = allProductsQuery.data;
-    isLoading = allProductsQuery.isLoading;
-    isError = allProductsQuery.isError;
-    error = allProductsQuery.error;
-    refetch = allProductsQuery.refetch;
-  }
-
-  if (categoriesQuery.isLoading || isLoading) return <Loader />;
-
-  if (categoriesQuery.isError || isError)
+  if (isLoading || !data) return <Loader />;
+  if (isError)
     return (
       <ErrorComponent
         error={error instanceof Error ? error : new Error('Невідома помилка')}
-        reset={refetch}
+        reset={() => {}}
       />
     );
 
-  const handleCategoryChange = (cat: string) => {
-    setCategory(cat);
-    setPage(1);
-    setSearch(''); // очищуємо пошук при зміні категорії
+  // ---- Оновлення URL без SSR ----
+  const updateQuery = (params: Record<string, string | number | undefined>) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === undefined || value === '' || value === 'all') {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, String(value));
+      }
+    });
+    router.replace(`/products?${newParams.toString()}`, { scroll: false });
   };
+
+  // ---- Зміна категорії ----
+  const handleCategoryChange = (slug: string) => {
+    setActiveCategory(slug);
+    setPage(1);
+    setSearch('');
+    updateQuery({ category: slug, page: 1, search: '' });
+  };
+
+  // ---- Зміна сторінки ----
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    updateQuery({ page: newPage });
+  };
+
+  // ---- Підготовка категорій ----
+  const categories: Category[] = [
+    { slug: 'all', name: 'Всі', url: '#' },
+    ...initialCategories,
+  ];
+
+  const slugs = categories.map(c => c.slug);
+  const duplicates = slugs.filter((slug, i) => slugs.indexOf(slug) !== i);
+  if (duplicates.length > 0) {
+    console.warn('Duplicate category slugs ProductClient:', duplicates);
+  }
 
   return (
     <section className="section">
       <div className="container">
+        {/* Category Filter */}
         <CategoryFilter
-          categories={['Всі', ...(categoriesQuery.data || [])]}
-          activeCategory={category}
+          categories={categories}
+          activeCategory={activeCategory}
           setActiveCategory={handleCategoryChange}
         />
 
+        {/* Products */}
         <ProductList
-          products={data?.products || []}
+          products={data.products}
           currentPage={page}
           itemsPerPage={ITEMS_PER_PAGE}
-          totalItems={data?.total || 0}
-          activeCategory={category}
-          onPageChange={setPage}
+          totalItems={data.total}
+          activeCategory={activeCategory}
+          onPageChange={handlePageChange}
         />
 
-        {isDesktop && data && data.total > ITEMS_PER_PAGE && (
+        {/* Pagination */}
+        {isDesktop && data.total > ITEMS_PER_PAGE && (
           <Pagination
             totalItems={data.total}
             itemsPerPage={ITEMS_PER_PAGE}
             currentPage={page}
-            onPageChange={setPage}
+            onPageChange={handlePageChange}
           />
         )}
       </div>

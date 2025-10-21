@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import type { Product } from '../../types/product';
 import styles from './ProductList.module.css';
-import Modal from '../Modal/Modal';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -27,23 +27,12 @@ interface Props {
 }
 
 export default function ProductList({ products }: Props) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const swiperRef = useRef<SwiperClass | null>(null);
 
   const isDesktop = useMediaQuery('(min-width: 1200px)');
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1199px)');
 
-  const openModal = (product: Product) => {
-    setSelectedProduct(product);
-    swiperRef.current?.autoplay?.stop();
-  };
-
-  const closeModal = () => {
-    setSelectedProduct(null);
-    swiperRef.current?.autoplay?.start();
-  };
-
-  const MAX_DISTANCE = 6; /*15 */
+  const MAX_DISTANCE = 6;
 
   const updateBullets = useCallback((swiper?: SwiperClass | null) => {
     const s = swiper ?? swiperRef.current;
@@ -95,13 +84,12 @@ export default function ProductList({ products }: Props) {
   // Desktop view
   if (isDesktop) {
     return (
-      <>
-        <ul className={styles.products}>
-          {products.map(product => (
-            <li
-              key={product.id}
-              className={styles.products__item}
-              onClick={() => openModal(product)}
+      <ul className={styles.products}>
+        {products.map(product => (
+          <li key={product.id} className={styles.products__item}>
+            <Link
+              href={`/products/${product.id}`}
+              className={styles.products__link}
             >
               <Image
                 src={product.thumbnail}
@@ -123,13 +111,10 @@ export default function ProductList({ products }: Props) {
               <p className={styles.products__price}>
                 Ціна: {product.price} грн.
               </p>
-            </li>
-          ))}
-        </ul>
-        {selectedProduct && (
-          <Modal product={selectedProduct} onClose={closeModal} />
-        )}
-      </>
+            </Link>
+          </li>
+        ))}
+      </ul>
     );
   }
 
@@ -138,52 +123,44 @@ export default function ProductList({ products }: Props) {
   const enableLoop = products.length > slidesPerView;
 
   return (
-    <>
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        onSwiper={handleOnSwiper}
-        onSlideChange={handleSlideChange}
-        navigation={isTablet}
-        pagination={{ clickable: true }}
-        spaceBetween={20}
-        slidesPerView={slidesPerView}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loop={enableLoop}
-      >
-        {products.map(product => (
-          <SwiperSlide key={product.id}>
-            <div
-              className={styles.products__item}
-              onClick={() => openModal(product)}
-            >
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                width={300}
-                height={300}
-                className={styles['products__image']}
-                priority
-              />
-              <p className={styles.products__title}>{product.title}</p>
-              <p className={styles.products__brand}>
-                <span className={styles['products__brand--bold']}>
-                  Бренд: {product.brand}
-                </span>
-              </p>
-              <p className={styles.products__category}>
-                Категорія: {product.category}
-              </p>
-              <p className={styles.products__price}>
-                Ціна: {product.price} грн.
-              </p>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      {selectedProduct && (
-        <Modal product={selectedProduct} onClose={closeModal} />
-      )}
-    </>
+    <Swiper
+      modules={[Navigation, Pagination, Autoplay]}
+      onSwiper={handleOnSwiper}
+      onSlideChange={handleSlideChange}
+      navigation={isTablet}
+      pagination={{ clickable: true }}
+      spaceBetween={20}
+      slidesPerView={slidesPerView}
+      autoplay={{ delay: 3000, disableOnInteraction: false }}
+      loop={enableLoop}
+    >
+      {products.map(product => (
+        <SwiperSlide key={product.id}>
+          <Link
+            href={`/products/${product.id}`}
+            className={styles.products__item}
+          >
+            <Image
+              src={product.thumbnail}
+              alt={product.title}
+              width={300}
+              height={300}
+              className={styles['products__image']}
+              priority
+            />
+            <p className={styles.products__title}>{product.title}</p>
+            <p className={styles.products__brand}>
+              <span className={styles['products__brand--bold']}>
+                Бренд: {product.brand}
+              </span>
+            </p>
+            <p className={styles.products__category}>
+              Категорія: {product.category}
+            </p>
+            <p className={styles.products__price}>Ціна: {product.price} грн.</p>
+          </Link>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 }
