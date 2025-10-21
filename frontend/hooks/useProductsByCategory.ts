@@ -1,15 +1,15 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { fetchProductsByCategoryClient } from '@/lib/clientApi';
-import type { ProductsResponse } from '@/lib/clientApi';
+import { fetchProductsClient } from '@/lib/clientApi';
+import type { ProductsResponseClient } from '@/lib/clientApi';
 
 export function useProductsByCategory(
   category: string,
   page: number,
   options = {},
 ) {
-  return useQuery<ProductsResponse>({
+  return useQuery<ProductsResponseClient>({
     queryKey: ['products', category, page],
-    queryFn: () => fetchProductsByCategoryClient(category, page),
+    queryFn: () => fetchProductsClient(page, category),
     enabled: !!category && category !== 'all', // ✅ не виконується без категорії
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60,

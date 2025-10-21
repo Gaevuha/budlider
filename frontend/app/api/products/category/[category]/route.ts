@@ -1,26 +1,25 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import axios, { AxiosError } from 'axios';
 
 const API_BASE = 'https://dummyjson.com/products';
 
 export async function GET(
-  req: Request,
-  { params }: { params: { category: string } },
+  req: NextRequest,
+  context: { params: Promise<{ category: string }> },
 ) {
-  const { category } = params;
-  const { searchParams } = new URL(req.url);
-  const page = Number(searchParams.get('page')) || 1;
+  const urlObj = new URL(req.url);
+  const page = Number(urlObj.searchParams.get('page')) || 1;
   const limit = 15;
-  const skip = (page - 1) * limit;
+  const skip = (page - 1) * limit; // ⬅ оголосили поза try
 
   try {
+    const { category } = await context.params;
+
     let url = '';
 
     if (category === 'all') {
-      // ✅ Усі товари
       url = `${API_BASE}?limit=${limit}&skip=${skip}`;
     } else {
-      // ✅ Товари конкретної категорії
       url = `${API_BASE}/category/${encodeURIComponent(
         category,
       )}?limit=${limit}&skip=${skip}`;
@@ -42,11 +41,10 @@ export async function GET(
       );
 
       if (err.response?.status === 404) {
-        // Якщо категорії не існує — повертаємо порожній масив
         return NextResponse.json({
           products: [],
           total: 0,
-          skip,
+          skip, // ⬅ тепер доступний
           limit,
         });
       }

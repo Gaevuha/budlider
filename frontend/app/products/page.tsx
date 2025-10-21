@@ -19,8 +19,6 @@ export default async function ProductsPage({
   const category = params?.category || 'all';
   const search = params?.search || '';
 
-  console.log('Server searchParams:', params, page, category, search);
-
   const [initialProducts, initialCategories] = await Promise.all([
     fetchProductsClient(page, category, search),
     fetchCategoriesClient(),

@@ -1,7 +1,7 @@
 'use client';
 
 import SearchForm from '../SearchForm/SearchForm';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Logo from '../Logo/Logo';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import Navigation from '../Navigation/Navigation';
@@ -12,19 +12,19 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import styles from './Header.module.css';
 
 export default function Header() {
-  const router = useRouter();
+  // const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1199px)');
   const isDesktop = useMediaQuery('(min-width: 1200px)');
 
-  const handleSearch = async (formData: FormData) => {
-    const searchValue = formData.get('searchValue')?.toString().trim() || '';
-    localStorage.setItem('budlider_search', searchValue);
-    router.push(`/?search=${encodeURIComponent(searchValue)}`);
-    setIsSearchOpen(false);
-  };
+  // const handleSearch = async (formData: FormData) => {
+  //   const searchValue = formData.get('searchValue')?.toString().trim() || '';
+  //   localStorage.setItem('budlider_search', searchValue);
+  //   router.push(`/?search=${encodeURIComponent(searchValue)}`);
+  //   setIsSearchOpen(false);
+  // };
 
   // 🔒 Блокування скролу, коли відкрито меню або пошук
   useEffect(() => {
