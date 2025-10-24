@@ -30,7 +30,7 @@ export const fetchProductsClient = async (
   if (category && category !== 'all') params.category = category;
   if (search) params.q = search;
 
-  const res = await apiClient.get<ProductsResponseClient>('/', { params });
+  const res = await apiClient.get<ProductsResponseClient>('', { params });
   return res.data;
 };
 

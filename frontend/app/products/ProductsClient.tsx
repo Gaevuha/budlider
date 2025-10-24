@@ -25,6 +25,7 @@ const ITEMS_PER_PAGE = 12;
 
 export default function ProductsClient({
   initialCategories,
+  initialProducts,
   initialSearch = '',
   initialPage = 1,
 }: Props) {
@@ -54,6 +55,11 @@ export default function ProductsClient({
     queryFn: () => fetchProductsClient(page, activeCategory, search),
     placeholderData: keepPreviousData,
     staleTime: 60_000,
+    initialData: initialProducts,
+
+    refetchOnMount: false, // не перезапускати при монтуванні
+    refetchOnWindowFocus: false, // не перезапускати при фокусі вікна
+    refetchOnReconnect: false, // не перезапускати при reconnect
   });
 
   if (isLoading || !data) return <Loader />;

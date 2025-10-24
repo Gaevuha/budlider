@@ -10,9 +10,8 @@ interface SearchParams {
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: SearchParams | Promise<SearchParams>; // може бути Promise
+  searchParams: SearchParams | Promise<SearchParams>;
 }) {
-  // 🔹 Якщо це Promise, чекаємо
   const params = 'then' in searchParams ? await searchParams : searchParams;
 
   const page = Number(params?.page) || 1;
