@@ -1,0 +1,54 @@
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.item-icons {
+  list-style: none;
+  width: 32px;
+  height: 32px;
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-dark);
+  transition: color 0.3s ease;
+}
+
+.icon-link:hover,
+.icon-link:focus {
+  color: #9ca8b3;
+}
+
+.icon-link svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+  stroke: currentColor;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease;
+}
+
+@media screen and (min-width: 1200px) {
+  .item-icons {
+    list-style: none;
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon-link svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social {
+    justify-self: start;
+    grid-column: 1;
+    grid-row: 1;
+  }
+}

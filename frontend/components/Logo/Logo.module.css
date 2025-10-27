@@ -1,0 +1,44 @@
+.icon__logo {
+  width: 80px;
+  height: 30px;
+}
+
+.text__logo {
+  font-size: 90px;
+  fill: var(--color-dark);
+  font-style: italic;
+}
+
+.text__logo-accent {
+  font-size: 90px;
+  font-weight: bold;
+  fill: var(--color-brand);
+}
+
+@media screen and (min-width: 768px) {
+  .icon__logo {
+    width: 120px; /*200*/
+    height: 35px; /*50*/
+  }
+  .text__logo {
+    font-size: 80px;
+  }
+
+  .text__logo-accent {
+    font-size: 80px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .icon__logo {
+    width: 200px; /*200*/
+    height: 50px; /*50*/
+  }
+  .text__logo {
+    font-size: 87px;
+  }
+
+  .text__logo-accent {
+    font-size: 87px;
+  }
+}
