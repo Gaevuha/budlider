@@ -5,25 +5,26 @@
 
 .text__logo {
   font-size: 90px;
-  fill: var(--color-dark);
+  fill: #fff;
   font-style: italic;
+  stroke: #fff;
 }
 
 .text__logo-accent {
   font-size: 90px;
   font-weight: bold;
-  fill: var(--color-brand);
+  fill: #fff;
+  stroke: #fff;
 }
 
 @media screen and (min-width: 768px) {
   .icon__logo {
-    width: 120px; /*200*/
-    height: 35px; /*50*/
+    width: 120px;
+    height: 35px;
   }
   .text__logo {
     font-size: 80px;
   }
-
   .text__logo-accent {
     font-size: 80px;
   }
@@ -31,13 +32,12 @@
 
 @media screen and (min-width: 1200px) {
   .icon__logo {
-    width: 200px; /*200*/
-    height: 50px; /*50*/
+    width: 200px;
+    height: 50px;
   }
   .text__logo {
     font-size: 87px;
   }
-
   .text__logo-accent {
     font-size: 87px;
   }

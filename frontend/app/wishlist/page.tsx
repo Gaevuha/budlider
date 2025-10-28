@@ -1,7 +1,7 @@
 // app/wishlist/page.tsx
-
+import WishlistClient from "./WishlistClient";
 const Wishlist = () => {
-  return <div>Wishlist</div>;
+  return <WishlistClient />;
 };
 
 export default Wishlist;

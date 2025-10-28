@@ -1,6 +1,7 @@
+"use client";
 // components/NoteItem/NoteItem.tsx
 
-import { Product } from "@/lib/api";
+import { Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductItem.module.css";
@@ -11,7 +12,7 @@ type Props = {
 
 const ProductItem = ({ item }: Props) => {
   return (
-    <li key={item.id} className={styles.products__item}>
+    <li className={styles.products__item}>
       <Link href={`/products/${item.id}`} className={styles.products__link}>
         <Image
           src={item.thumbnail}

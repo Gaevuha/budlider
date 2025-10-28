@@ -8,7 +8,7 @@
 }
 .address-text {
   font-weight: 600;
-  color: var(--color-dark);
+  color: #fff; /*var(--color-dark);*/
   margin: 0 auto 4px;
   font-size: 14px;
 }
@@ -23,7 +23,7 @@
 }
 
 .wrap-address .address-link {
-  color: var(--color-dark);
+  color: #fff; /*var(--color-dark);*/
   text-align: center;
   font-size: 14px;
 }

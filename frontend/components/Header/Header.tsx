@@ -2,12 +2,13 @@
 
 import css from "./Header.module.css";
 import Link from "next/link";
+import Logo from "@/components/Logo/Logo";
 
 const Header = () => {
   return (
     <header className={`${css.header} container`}>
-      <Link href="/" aria-label="Home">
-        Budlider
+      <Link className={css.logo} href="/" aria-label="Site logo">
+        <Logo />
       </Link>
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>

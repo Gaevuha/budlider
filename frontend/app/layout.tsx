@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import "./globals.css";
 
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import { WishlistProvider } from "@/context/WishlistContext";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +29,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header />
-        <main>{children}</main>
-
-        <Footer />
+        <TanStackProvider>
+          <Header />
+          <CartProvider>
+            <WishlistProvider>
+              <main>{children}</main>
+            </WishlistProvider>
+          </CartProvider>
+          <Footer />
+        </TanStackProvider>
       </body>
     </html>
   );

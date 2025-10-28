@@ -1,16 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  trailingSlash: false,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.dummyjson.com",
-        pathname: "/**",
-      },
-    ],
+    domains: ["cdn.dummyjson.com", "budlider.vercel.app"],
   },
-  reactCompiler: true,
+  async rewrites() {
+    return [
+      {
+        source: "/backend/:path*", // всі запити на /backend/*
+        destination: "http://localhost:5000/:path*", // проксі на Node.js
+      },
+    ];
+  },
 };
 
 export default nextConfig;
