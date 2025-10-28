@@ -1,5 +1,7 @@
 "use client";
 
+// app/wishlist/WishlistClient.tsx
+
 import Image from "next/image";
 import styles from "./WishlistPage.module.css";
 import { useWishlistContext } from "@/hooks/useWishlistContext";

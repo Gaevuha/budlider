@@ -1,5 +1,7 @@
 "use client";
 
+// app/cart/CartClient.tsx;
+
 import { useCart } from "@/context/CartContext";
 import styles from "./CartPage.module.css";
 import Image from "next/image";
