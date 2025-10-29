@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { Product } from "@/types/product";
+import { Category } from "@/types/category";
 
 export type ProductListResponse = {
   products: Product[];
@@ -9,15 +10,20 @@ export type ProductListResponse = {
 };
 
 axios.defaults.baseURL = "https://dummyjson.com";
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const getProducts = async () => {
-  await delay(2000);
-  const res = await axios.get<ProductListResponse>("/products");
+export const getProducts = async (category?: string) => {
+  const endpoint = category ? `/products/category/${category}` : `/products`;
+
+  const res = await axios.get<ProductListResponse>(endpoint);
   return res.data;
 };
 
 export const getSingleProduct = async (id: string) => {
   const res = await axios.get<Product>(`/products/${id}`);
+  return res.data;
+};
+
+export const getCategories = async () => {
+  const res = await axios.get<Category[]>("/products/categories");
   return res.data;
 };

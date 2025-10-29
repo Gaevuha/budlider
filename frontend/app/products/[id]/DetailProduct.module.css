@@ -1,9 +1,14 @@
 .productPage__container {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
-
+.btn__back {
+  position: absolute;
+  top: -35px;
+  left: 0;
+}
 .productPage__img {
   margin: 0 auto;
   width: 220px;
@@ -94,7 +99,6 @@
     grid-template-columns: 1fr 1fr;
     align-items: center;
   }
-
   .productPage__img {
     width: 300px;
     height: 300px;
@@ -114,11 +118,12 @@
   .productPage__actions {
     flex-direction: row;
     grid-column: 1 / -1;
+    align-items: center;
+    justify-content: center;
   }
 
   .productPage__btn {
-    flex: 1; /* щоб кнопки займали рівну ширину */
-    width: auto;
+    width: 250px;
   }
 
   .productPage__btn--cart:hover {

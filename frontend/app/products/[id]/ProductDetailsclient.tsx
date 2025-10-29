@@ -7,9 +7,11 @@ import { getSingleProduct } from "@/lib/api";
 import Image from "next/image";
 import ProductActions from "@/components/ProductActions/ProductActions";
 import styles from "./DetailProduct.module.css";
+import { useRouter } from "next/navigation";
 
 const ProductDetailsClient = () => {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const {
     data: product,
     isLoading,
@@ -23,9 +25,19 @@ const ProductDetailsClient = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error || !product) return <p>Some error..</p>;
 
+  const handleGoBack = () => {
+    const isSure = confirm("Ви дійсно бажаєте повернутись?");
+    if (isSure) {
+      router.back();
+    }
+  };
+
   return (
-    <div className="section">
+    <section className="section">
       <div className={`${styles.productPage__container} container`}>
+        <button className={styles.btn__back} onClick={handleGoBack}>
+          Назад
+        </button>
         <div className={styles.productPage__img}>
           <Image
             src={product.thumbnail}
@@ -44,13 +56,19 @@ const ProductDetailsClient = () => {
           <p className={styles.productPage__description}>
             {product.description}
           </p>
+          <p className={styles.modalProduct__shippingInformation}>
+            Доставка: Доставка на адресу замовника
+          </p>
+          <p className={styles.modalProduct__returnPolicy}>
+            Політика повернення: Повернення на протязі 14 днів
+          </p>
           <p className={styles.productPage__price}>
             Ціна: {product.price} грн.
           </p>
         </div>
         <ProductActions product={product} />
       </div>
-    </div>
+    </section>
   );
 };
 

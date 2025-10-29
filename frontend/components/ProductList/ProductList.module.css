@@ -1,6 +1,17 @@
 .products {
   margin-bottom: 40px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: 2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (min-width: 1200px) {
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

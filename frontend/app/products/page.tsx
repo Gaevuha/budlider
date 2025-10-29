@@ -7,15 +7,13 @@ const Products = async () => {
   const response = await getProducts();
 
   return (
-    <section className="section">
-      <div className="container">
-        {response?.products?.length > 0 ? (
-          <ProductList products={response.products} />
-        ) : (
-          <p>Товари відсутні</p>
-        )}
-      </div>
-    </section>
+    <div>
+      {response?.products?.length > 0 ? (
+        <ProductList products={response.products} />
+      ) : (
+        <p>Товари відсутні</p>
+      )}
+    </div>
   );
 };
 

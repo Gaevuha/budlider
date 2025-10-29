@@ -78,9 +78,9 @@
 }
 
 @media screen and (min-width: 1200px) {
-  .products__image {
+  /* .products__image {
     width: 300px;
-  }
+  } */
 
   .products__item:hover {
     transform: translateY(-5px);

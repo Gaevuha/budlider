@@ -5,7 +5,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getSingleProduct } from "@/lib/api";
-import ProductDetailsClient from "./ProductDetails.client";
+import ProductDetailsClient from "./ProductDetailsclient";
 
 type Props = {
   params: Promise<{ id: string }>;

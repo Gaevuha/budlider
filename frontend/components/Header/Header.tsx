@@ -3,8 +3,12 @@
 import css from "./Header.module.css";
 import Link from "next/link";
 import Logo from "@/components/Logo/Logo";
+import { getCategories } from "@/lib/api";
+import CategoriesMenu from "../CategoriesMenu/CategoriesMenu";
 
-const Header = () => {
+const Header = async () => {
+  const categories = await getCategories();
+
   return (
     <header className={`${css.header} container`}>
       <Link className={css.logo} href="/" aria-label="Site logo">
@@ -16,7 +20,7 @@ const Header = () => {
             <Link href="/">Дім</Link>
           </li>
           <li>
-            <Link href="/products">Каталог</Link>
+            <CategoriesMenu categories={categories} />
           </li>
           <li>
             <Link href="/cart">Кошик</Link>
