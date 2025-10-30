@@ -10,18 +10,27 @@ const ProductsSidebar = async () => {
   return (
     <ul className={css.menuList}>
       <li>
-        <Link href={`/products/filter/all`}>Всі категорії</Link>
+        <Link href={`/products/filter/All`} className={css.menuLink}>
+          Всі категорії
+        </Link>
       </li>
-      {categories.map((category) => (
-        <li key={category.slug}>
-          <Link
-            href={`/products/filter/${category.slug}`}
-            className={css.menuLink}
-          >
-            {category.name}
-          </Link>
-        </li>
-      ))}
+
+      {categories.map((category) => {
+        // Зробимо першу літеру великою
+        const capitalizedSlug =
+          category.slug.charAt(0).toUpperCase() + category.slug.slice(1);
+
+        return (
+          <li key={category.slug}>
+            <Link
+              href={`/products/filter/${capitalizedSlug}`}
+              className={css.menuLink}
+            >
+              {category.name}
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 };

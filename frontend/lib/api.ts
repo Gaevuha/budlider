@@ -11,10 +11,27 @@ export type ProductListResponse = {
 
 axios.defaults.baseURL = "https://dummyjson.com";
 
-export const getProducts = async (category?: string) => {
-  const endpoint = category ? `/products/category/${category}` : `/products`;
+export const getProducts = async (
+  category?: string,
+  limit: number = 10,
+  skip: number = 0
+): Promise<ProductListResponse> => {
+  const endpoint = category
+    ? `/products/category/${category}?limit=${limit}&skip=${skip}`
+    : `/products?limit=${limit}&skip=${skip}`;
 
   const res = await axios.get<ProductListResponse>(endpoint);
+  return res.data;
+};
+
+export const searchProducts = async (
+  query: string,
+  limit: number = 10,
+  skip: number = 0
+): Promise<ProductListResponse> => {
+  const res = await axios.get<ProductListResponse>(
+    `/products/search?q=${encodeURIComponent(query)}&limit=${limit}&skip=${skip}`
+  );
   return res.data;
 };
 

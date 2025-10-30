@@ -1,23 +1,24 @@
-// app/products/filter/[...slug]/page.tsx
-import { getProducts } from "@/lib/api";
-import ProductList from "@/components/ProductList/ProductList";
+import ProductsClient from "./Products.client";
+import { getProducts, ProductListResponse } from "@/lib/api";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
 
-const ProductsByCategory = async ({ params }: Props) => {
-  const { slug } = await params;
-  const category = slug[0] === "all" ? undefined : slug[0];
-  const response = await getProducts(category);
+export default async function ProductsByCategory({ params }: Props) {
+  const resolvedParams = await params;
+  const slugArray = resolvedParams.slug;
+  const slugString = slugArray?.[0] ?? "all";
+  const category =
+    slugString.toLowerCase() === "all" ? undefined : slugString.toLowerCase();
+  let initialData: ProductListResponse | undefined = undefined;
+  try {
+    initialData = await getProducts(category, 9, 0);
+  } catch (err) {
+    console.error("Failed to fetch products:", err);
+  }
 
   return (
-    <>
-      {response?.products?.length > 0 && (
-        <ProductList products={response.products} />
-      )}
-    </>
+    <ProductsClient initialCategory={slugString} initialData={initialData} />
   );
-};
-
-export default ProductsByCategory;
+}

@@ -17,7 +17,7 @@ export default async function HomePage() {
                 сантехніки, електротоварів та фітингів. Також надаємо послуги
                 спецтехніки: екскаватор, кран, маніту, самоскид.
               </p>
-              <Link href="/products/filter/all" className={styles.heroBtn}>
+              <Link href="/products/filter/All" className={styles.heroBtn}>
                 Переглянути каталог
               </Link>
             </div>
@@ -87,7 +87,7 @@ export default async function HomePage() {
             клей, фарбу, утеплювачі, інструменти, сантехніку, електрику та
             господарські товари.
           </p>
-          <Link href="/products/filter/all" className={styles.productsBtn}>
+          <Link href="/products/filter/All" className={styles.productsBtn}>
             Переглянути всі товари
           </Link>
         </div>

@@ -1,5 +1,3 @@
-// components/CategoriesMenu/CategoriesMenu.tsx
-
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -9,6 +7,8 @@ import css from "./CategoriesMenu.module.css";
 type Props = {
   categories: Category[];
 };
+
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const CategoriesMenu = ({ categories }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,13 +22,16 @@ const CategoriesMenu = ({ categories }: Props) => {
       {isOpen && (
         <ul className={css.menu}>
           <li className={css.menuItem}>
-            <Link href={`/products/filter/all`} onClick={toggle}>
+            <Link href={`/products/filter/All`} onClick={toggle}>
               Всі категорії
             </Link>
           </li>
           {categories.map((category) => (
             <li key={category.slug} className={css.menuItem}>
-              <Link href={`/products/filter/${category.slug}`} onClick={toggle}>
+              <Link
+                href={`/products/filter/${capitalize(category.slug)}`}
+                onClick={toggle}
+              >
                 {category.name}
               </Link>
             </li>
