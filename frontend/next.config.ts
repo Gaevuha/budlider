@@ -3,7 +3,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   trailingSlash: false,
   images: {
-    domains: ["cdn.dummyjson.com", "budlider.vercel.app"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.dummyjson.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "budlider.vercel.app",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
   async rewrites() {
     return [

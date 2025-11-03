@@ -13,24 +13,29 @@ type Props = {
 const ProductItem = ({ item }: Props) => {
   return (
     <li className={styles.products__item}>
-      <Link href={`/products/${item.id}`} className={styles.products__link}>
-        <Image
-          src={item.thumbnail}
-          alt={item.title}
-          width={300}
-          height={300}
-          className={styles.products__image}
-          priority
-        />
-        <p className={styles.products__title}>{item.title}</p>
-        <p className={styles.products__brand}>
-          <span className={styles["products__brand--bold"]}>
-            Бренд: {item.brand}
-          </span>
-        </p>
-        <p className={styles.products__category}>Категорія: {item.category}</p>
-        <p className={styles.products__price}>Ціна: {item.price} грн.</p>
+      <Image
+        src={item.thumbnail}
+        alt={item.title}
+        width={300}
+        height={300}
+        className={styles.products__image}
+        priority
+      />
+      <p className={styles.products__title}>{item.title}</p>
+      <p className={styles.products__brand}>
+        <span className={styles["products__brand--bold"]}>
+          Бренд: {item.brand}
+        </span>
+      </p>
+      <p className={styles.products__category}>Категорія: {item.category}</p>
+      <Link
+        href={`/products/${item.id}`}
+        className={styles.products__link}
+        scroll={false}
+      >
+        Деталі товару
       </Link>
+      <p className={styles.products__price}>Ціна: {item.price} грн.</p>
     </li>
   );
 };

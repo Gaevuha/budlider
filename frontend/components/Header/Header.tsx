@@ -23,6 +23,9 @@ const Header = async () => {
             <CategoriesMenu categories={categories} />
           </li>
           <li>
+            <Link href="/about">Про нас</Link>
+          </li>
+          <li>
             <Link href="/cart">Кошик</Link>
           </li>
           <li>
