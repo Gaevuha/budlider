@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import ProductsClient from "./Products.client";
 import { getProducts, ProductListResponse } from "@/lib/api";
 
@@ -6,19 +7,27 @@ type Props = {
 };
 
 export default async function ProductsByCategory({ params }: Props) {
-  const resolvedParams = await params;
-  const slugArray = resolvedParams.slug;
-  const slugString = slugArray?.[0] ?? "all";
-  const category =
-    slugString.toLowerCase() === "all" ? undefined : slugString.toLowerCase();
-  let initialData: ProductListResponse | undefined = undefined;
+  const { slug } = await params;
+  const category = slug?.[0] || "All";
+  const categoryParam =
+    category.toLowerCase() === "all" ? undefined : category.toLowerCase();
+
+  const data: ProductListResponse = {
+    products: [],
+    total: 0,
+  };
+
   try {
-    initialData = await getProducts(category, 9, 0);
-  } catch (err) {
-    console.error("Failed to fetch products:", err);
+    const fetched = await getProducts("", 1, 9, categoryParam);
+    data.products = fetched.products || [];
+    data.total = fetched.total || 0;
+  } catch {
+    notFound();
   }
 
-  return (
-    <ProductsClient initialCategory={slugString} initialData={initialData} />
-  );
+  if (!data.products || data.products.length === 0) {
+    notFound();
+  }
+
+  return <ProductsClient initialData={data} initialCategory={category} />;
 }

@@ -12,21 +12,60 @@ export type ProductListResponse = {
 axios.defaults.baseURL = "https://dummyjson.com";
 
 export const getProducts = async (
-  category?: string,
-  limit: number = 10,
-  skip: number = 0
+  searchQuery: string = "",
+  page: number = 1,
+  perPage: number = 9,
+  category?: string
 ): Promise<ProductListResponse> => {
-  const endpoint = category
-    ? `/products/category/${category}?limit=${limit}&skip=${skip}`
-    : `/products?limit=${limit}&skip=${skip}`;
+  const skip = (page - 1) * perPage;
 
-  const res = await axios.get<ProductListResponse>(endpoint);
-  return res.data;
+  // 🟢 Якщо є пошук — використовуємо /products/search
+  if (searchQuery.trim()) {
+    try {
+      const res = await axios.get<ProductListResponse>("/products/search", {
+        params: { q: searchQuery, limit: perPage, skip },
+      });
+      return res.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.message || "Network Error");
+      }
+      throw error;
+    }
+  }
+
+  // 🟡 Якщо є категорія — використовуємо /products/category/:category
+  if (category && category.toLowerCase() !== "all") {
+    try {
+      const res = await axios.get<ProductListResponse>(
+        `/products/category/${category.toLowerCase()}`,
+        { params: { limit: perPage, skip } }
+      );
+      return res.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.message || "Network Error");
+      }
+      throw error;
+    }
+  }
+
+  // 🔵 Якщо немає ні пошуку, ні категорії — беремо всі продукти
+  try {
+    const res = await axios.get<ProductListResponse>("/products", {
+      params: { limit: perPage, skip },
+    });
+    return res.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.message || "Network Error");
+    }
+    throw error;
+  }
 };
-
 export const searchProducts = async (
   query: string,
-  limit: number = 10,
+  limit: number = 9,
   skip: number = 0
 ): Promise<ProductListResponse> => {
   const res = await axios.get<ProductListResponse>(

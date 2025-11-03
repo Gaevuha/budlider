@@ -156,6 +156,9 @@ svg {
   margin: 0 auto;
   padding: 0 20px;
 }
+.loader {
+  text-align: center;
+}
 
 /* Tablet */
 @media only screen and (min-width: 768px) {
