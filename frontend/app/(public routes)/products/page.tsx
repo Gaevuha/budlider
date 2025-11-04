@@ -1,4 +1,4 @@
-// app/products/page.tsx;
+// app/(public routes)/products/page.tsx
 
 import { getProducts } from "@/lib/api";
 import ProductList from "@/components/ProductList/ProductList";

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
-import styles from "@/app/products/[id]/DetailProduct.module.css";
+import styles from "@/app/(public routes)/products/[id]/DetailProduct.module.css";
 
 type Props = {
   product: Product;

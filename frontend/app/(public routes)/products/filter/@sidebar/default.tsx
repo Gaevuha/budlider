@@ -10,12 +10,12 @@ const ProductsSidebar = async () => {
   return (
     <ul className={css.menuList}>
       <li>
-        <Link href={`/products/filter/all`}>Всі категорії</Link>
+        <Link href={`/products/filter/All`}>Всі категорії</Link>
       </li>
       {categories.map((category) => (
         <li key={category.slug}>
           <Link
-            href={`/products/filter/${category.slug}`}
+            href={`/products/filter/${category.slug.charAt(0).toUpperCase() + category.slug.slice(1)}`}
             className={css.menuLink}
           >
             {category.name}
